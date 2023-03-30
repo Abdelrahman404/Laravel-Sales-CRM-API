@@ -2,20 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
+use App\Models\City;
+use App\Models\Country;
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function countries()
     {
-        //
+        $data = [];
+        $countries = Country::get();
+
+        $data['countries'] = $countries;
+
+        return response()->json($data);
     }
 
+    public function cities($id){
+
+        $data = [];
+
+        $cities = City::where('country_id', $id)->get();
+
+        $data['cities'] = $cities;
+
+        return response()->json($data);
+    }
+    public function areas($id){
+
+        $data = [];
+
+        $areas = Area::where('city_id', $id)->get();
+
+        $data['areas'] = $areas;
+
+        return response()->json($data);
+    }
     /**
      * Show the form for creating a new resource.
      *
