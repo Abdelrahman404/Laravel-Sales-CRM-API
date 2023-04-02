@@ -1,51 +1,29 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Area;
-use App\Models\City;
-use App\Models\Country;
+use App\Http\Requests\CreateUserRequest;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\UserInfo;
 
-class LocationController extends Controller
+class UserController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function countries()
+    public function index()
     {
-
-        $data = [];
-        $countries = Country::get();
-
-        $data['countries'] = $countries;
-
-        return response()->json($data);
-    }
-
-    public function cities($id){
-
         $data = [];
 
-        $cities = City::where('country_id', $id)->get();
+        $users = User::paginate(10);
 
-        $data['cities'] = $cities;
+        $data['users'] = $users;
 
-        return response()->json($data);
+        return response()->json($users);
     }
-    public function areas($id){
 
-        $data = [];
-
-        $areas = Area::where('city_id', $id)->get();
-
-        $data['areas'] = $areas;
-
-        return response()->json($data);
-    }
     /**
      * Show the form for creating a new resource.
      *
@@ -62,9 +40,37 @@ class LocationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
-        //
+       
+        $data = $request->only(['name_en', 'name_ar', 'password', 'type', 'details', 'email']);
+
+     
+        $user = User::create([
+                'email' => $data['email'],
+                'name_en'=> $data['name_en'],
+                'name_ar'=> $data['name_ar'],
+                'password' => $data['password'],
+                'type' => $data['type'],
+        ]);
+
+        // If user is not admin (seller)
+        if(count($data['details']) > 0){
+
+            foreach($data['details'] as $detail)
+
+            $info = UserInfo::create([
+                'user_id' => $user->id,
+                'country_id' => $detail['country_id'],
+                'comission' => $detail['comission'],
+                'target' => $detail['target'],
+        ]);
+
+
+    
+        return sendResponse($user, 'User added successfully!');
+    }
+
     }
 
     /**
@@ -75,7 +81,13 @@ class LocationController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = [];
+
+        $user = User::with('userInfo')->findOrFail($id);
+
+        $data['user'] = $user;
+
+        return response()->json($data);
     }
 
     /**

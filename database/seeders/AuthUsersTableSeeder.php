@@ -15,13 +15,15 @@ class AuthUsersTableSeeder extends Seeder
     public function run()
     {
         User::create([
-                'name' => 'admin-cloud-secret',
+                'name_en' => 'admin-cloud-secret',
+                'name_ar' => 'مدير شركه اسرار السحابة',
                 'password' => bcrypt('123456'),
                 'email' => 'admin@cloudsecrets.com',
         ]);
 
         User::create([
-            'name' => 'sales-cloud-secret',
+            'name_en' => 'sales-cloud-secret',
+            'name_ar' => 'بائع شركة أسرار السحابة',
             'password' => bcrypt('123456'),
             'email' => 'sales@cloudsecrets.com',
     ]);
