@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,15 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::get('/user/{id}', [UserController::Class, 'show']);
         route::post('/user/store', [UserController::Class, 'store']);
         route::post('/user/update/', [UserController::Class, 'update']);
+        route::get('/user/delete/{id}', [UserController::Class, 'destroy']);
+
+        // Clients Routes
+        route::get('/clients', [ClientController::Class, 'index']);
+        // route::get('/users/deleted', [UserController::Class, 'deletedUsers']);
+        route::post('/client/store', [ClientController::Class, 'store']);
+        route::post('/client/update/', [ClientController::Class, 'update']);
+    
+        route::get('/user/{id}', [UserController::Class, 'show']);
         route::get('/user/delete/{id}', [UserController::Class, 'destroy']);
         
 });
