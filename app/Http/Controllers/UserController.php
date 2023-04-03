@@ -68,7 +68,7 @@ class UserController extends Controller
 
 
     
-        return sendResponse($user, 'User added successfully!');
+        return sendResponse($user, trans('messages.added_successfully'));
     }
 
     }

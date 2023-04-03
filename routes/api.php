@@ -32,10 +32,8 @@ Route::controller(AuthController::class)->group(function () {
 
 
 
-Route::group(['prefix' => 'v1/ar/'], function () {
+Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language']], function () {
 
-
-    Route::middleware('auth:api')->group(function () {
 
         // Location routes
         route::get('/countries', [LocationController::Class, 'countries']);
@@ -48,7 +46,7 @@ Route::group(['prefix' => 'v1/ar/'], function () {
         route::post('/user/store', [UserController::Class, 'store']);
         route::post('/user/update/{id}', [UserController::Class, 'update']);
         
-    });
+    
 });
 
 Route::controller(AuthController::class)->group(function () {
