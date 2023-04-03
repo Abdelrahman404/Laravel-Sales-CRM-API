@@ -20,7 +20,16 @@ class User extends Authenticatable implements JWTSubject
         'name_en',
         'email',
         'password',
+        'image',
     ];
+
+    protected $appends = ['name'];
+
+    public function getNameAttribute()
+    {
+        return $this->{'name_'.app()->getLocale()};
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -29,7 +38,10 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
+        'name_ar',
+        'name_en',
         'remember_token',
+        'email_verified_at',
     ];
 
     /**
@@ -63,7 +75,7 @@ class User extends Authenticatable implements JWTSubject
     
     public function userInfo(){
 
-        return $this->hasMany(User::class);
+        return $this->hasMany(UserInfo::class);
     }
 
 }

@@ -1,5 +1,5 @@
 <?php
-     function sendResponse($result, $message = '')
+     function sendResponse($result, $message = 'success')
     {
     	$response = [
             'check' => true,
@@ -22,4 +22,13 @@
         }
 
         return response()->json($response, $code);
+    }
+
+     function uploadFile($image){
+        $filename = time() . '.' . $image->extension();
+
+        $image->move(public_path('images'), $filename);
+        
+        return $filename;
+
     }

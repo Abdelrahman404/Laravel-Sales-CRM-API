@@ -11,6 +11,19 @@ class City extends Model
 
     protected $guarded = [];
 
+    protected $hidden = [
+        'name_ar',
+        'name_en',
+    ];
+    
+    protected $appends = ['name'];
+    
+    public function getNameAttribute()
+    {
+        return $this->{'name_'.app()->getLocale()};
+    }
+
+
     public function areas(){
 
         return $this->hasMany(Area::class);

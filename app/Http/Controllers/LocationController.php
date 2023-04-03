@@ -23,24 +23,24 @@ class LocationController extends Controller
 
         $data['countries'] = $countries;
 
-        return response()->json($data);
+        return sendResponse($data, trans('messages.success'));
     }
 
-    public function cities($id){
+    public function cities(Request $request){
 
         $data = [];
 
-        $cities = City::where('country_id', $id)->get();
+        $cities = City::where('country_id', $request->id)->get();
 
         $data['cities'] = $cities;
 
         return response()->json($data);
     }
-    public function areas($id){
+    public function areas(Request $request){
 
         $data = [];
 
-        $areas = Area::where('city_id', $id)->get();
+        $areas = Area::where('city_id', $request->id)->get();
 
         $data['areas'] = $areas;
 

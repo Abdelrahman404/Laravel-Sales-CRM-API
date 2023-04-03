@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserInfo;
@@ -17,11 +18,11 @@ class UserController extends Controller
     {
         $data = [];
 
-        $users = User::paginate(10);
+        $users = User::where('status', 1)->paginate(10);
 
         $data['users'] = $users;
 
-        return response()->json($users);
+        return sendResponse($users , trans('messages.success'));
     }
 
     /**
@@ -42,14 +43,20 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-       
+     
         $data = $request->only(['name_en', 'name_ar', 'password', 'type', 'details', 'email']);
 
-     
+        if($request->hasFile('image')){
+            $imageName = uploadFile($request->file('image'));
+        }else{
+            $fileName = 'avatar.png';
+        }
+
         $user = User::create([
                 'email' => $data['email'],
                 'name_en'=> $data['name_en'],
                 'name_ar'=> $data['name_ar'],
+                'image' => env('APP_URL') . '/storage' . '/' .$fileName,
                 'password' => $data['password'],
                 'type' => $data['type'],
         ]);
@@ -66,8 +73,6 @@ class UserController extends Controller
                 'target' => $detail['target'],
         ]);
 
-
-    
         return sendResponse($user, trans('messages.added_successfully'));
     }
 
@@ -79,11 +84,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
         $data = [];
-
-        $user = User::with('userInfo')->findOrFail($id);
+        
+        $user = User::with('userInfo')->findOrFail($request->id);
 
         $data['user'] = $user;
 
@@ -108,9 +113,27 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request)
     {
-        //
+       $data = $request->only(['id', 'name_en', 'name_ar', 'password', 'type', 'details', 'email']);
+
+        if($request->hasFile('image')){
+            $fileName = uploadFile($request->file('image'));
+            $filePath = env('APP_URL') . '/storage' . '/' .$fileName;
+        }else{
+            $filePath = User::find($data['id'])->image;
+        }
+
+        $user = User::where('id', $data['id'])->update([
+                'email' => $data['email'],
+                'name_en'=> $data['name_en'],
+                'name_ar'=> $data['name_ar'],
+                'image' => $filePath,
+                'password' => $data['password'],
+                'type' => $data['type'],
+        ]);
+
+        return sendResponse($user, trans('messages.updated_successfully'));
     }
 
     /**
@@ -119,8 +142,23 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $user  = User::findOrFail($request->id);
+        $user->status = 0;
+        $user->save();
+
+        return sendResponse('success', trans('messages.removed_successfully'));
+    }
+
+    public function deletedUsers(){
+
+        $data = [];
+
+        $users = User::where('status', 0)->paginate(10);
+
+        $data['users'] = $users;
+
+        return sendResponse($users , trans('messages.success'));        
     }
 }

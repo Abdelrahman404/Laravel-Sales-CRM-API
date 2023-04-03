@@ -24,10 +24,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Auth Routes
 Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
+    Route::group(['prefix' => 'v1'], function(){
+        Route::post('login', 'login');
+        Route::post('register', 'register');
+        Route::post('logout', 'logout');
+        Route::post('refresh', 'refresh');
+    });
+
 });
 
 
@@ -42,19 +45,15 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
 
         // Users routes
         route::get('/users', [UserController::Class, 'index']);
+        route::get('/users/deleted', [UserController::Class, 'deletedUsers']);
         route::get('/user/{id}', [UserController::Class, 'show']);
         route::post('/user/store', [UserController::Class, 'store']);
-        route::post('/user/update/{id}', [UserController::Class, 'update']);
+        route::post('/user/update/', [UserController::Class, 'update']);
+        route::get('/user/delete/{id}', [UserController::Class, 'destroy']);
         
-    
 });
 
-Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
-});
+;
 
 
 

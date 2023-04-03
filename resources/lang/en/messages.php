@@ -3,6 +3,7 @@
 
 return [
 
+    'success' => 'success',
     'added_successfully' => 'Added successfully!',
     'updated_successfully' => 'Updated successfully',
     'removed_successfully' => 'Removed successfully',
