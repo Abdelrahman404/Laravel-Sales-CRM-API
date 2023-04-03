@@ -11,42 +11,6 @@ class LocationController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function countries()
-    {
-
-        $data = [];
-        $countries = Country::get();
-
-        $data['countries'] = $countries;
-
-        return sendResponse($data, trans('messages.success'));
-    }
-
-    public function cities(Request $request){
-
-        $data = [];
-
-        $cities = City::where('country_id', $request->id)->get();
-
-        $data['cities'] = $cities;
-
-        return response()->json($data);
-    }
-    public function areas(Request $request){
-
-        $data = [];
-
-        $areas = Area::where('city_id', $request->id)->get();
-
-        $data['areas'] = $areas;
-
-        return response()->json($data);
-    }
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

@@ -19,6 +19,8 @@ class UserController extends Controller
         $data = [];
 
         $users = User::where('status', 1)->paginate(10);
+        
+        $users->makeVisible(['name_en', 'name_ar']);
 
         $data['users'] = $users;
 

@@ -14,6 +14,8 @@ class Country extends Model
     protected $hidden = [
         'name_ar',
         'name_en',
+        'created_at',
+        'updated_at',
     ];
     
     protected $appends = ['name'];

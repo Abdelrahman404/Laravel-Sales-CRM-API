@@ -6,6 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\AreaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,9 +43,9 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
 
 
         // Location routes
-        route::get('/countries', [LocationController::Class, 'countries']);
-        route::get('/cities/{id}', [LocationController::Class, 'cities']);
-        route::get('/areas/{id}', [LocationController::Class, 'areas']);
+        route::get('/countries', [CountryController::Class, 'countries']);
+        route::get('/cities/{id}', [CityController::Class, 'cities']);
+        route::get('/areas/{id}', [AreaController::Class, 'areas']);
 
         // Users routes
         route::get('/users', [UserController::Class, 'index']);
