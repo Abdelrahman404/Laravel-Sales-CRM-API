@@ -19,13 +19,14 @@ class CreateClientsTable extends Migration
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('address')->nullable();
+            $table->string('phone')->nullable();
             $table->string('google_map');
             $table->unsignedInteger('country_id');
             $table->unsignedBigInteger('city_id')->nullable();
             $table->unsignedBigInteger('area_id')->nullable();
             $table->string('products_interest')->nullable();
             $table->string('company_level')->nullable();
-            $table->integer('status')->nullable();
+            $table->integer('status')->default(1);
             $table->boolean('active')->default(true);
             $table->mediumText('note')->nullable();
             $table->string('created_by');

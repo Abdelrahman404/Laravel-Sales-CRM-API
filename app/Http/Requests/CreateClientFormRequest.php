@@ -25,6 +25,7 @@ class CreateClientFormRequest extends FormRequest
     {
         return [
             'date' => 'required',
+            'phone' => 'nullable',
             'name' => 'required',
             'email' => 'nullable|email',
             'address' => 'nullable',
@@ -34,7 +35,6 @@ class CreateClientFormRequest extends FormRequest
             'area_id' =>'nullable|exists:areas,id',
             'products_interest' => 'nullable',
             'company_level' => 'nullable',
-            'status' => 'nullable',
             'note' => 'nullable',
         ];
     }

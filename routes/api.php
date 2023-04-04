@@ -57,12 +57,11 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
 
         // Clients Routes
         route::get('/clients', [ClientController::Class, 'index']);
-        // route::get('/users/deleted', [UserController::Class, 'deletedUsers']);
+        route::get('/clients/deleted', [ClientController::Class, 'deletedClients']);
         route::post('/client/store', [ClientController::Class, 'store']);
         route::post('/client/update/', [ClientController::Class, 'update']);
-    
-        route::get('/user/{id}', [UserController::Class, 'show']);
-        route::get('/user/delete/{id}', [UserController::Class, 'destroy']);
+        // route::get('/user/{id}', [UserController::Class, 'show']);
+        route::get('/client/delete/{id}', [ClientController::Class, 'destroy']);
         
 });
 

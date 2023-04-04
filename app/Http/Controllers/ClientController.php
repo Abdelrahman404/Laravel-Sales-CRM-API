@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateClientFormRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
+use App\Models\Status;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -14,9 +15,30 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        
+    public function index(Request $request)
+    { 
+        $data = [];
+
+        $clients = Client::where('active', true)
+                        ->with('country', 'city', 'area')
+                        ->paginate(15);
+
+        $cases = Status::all();
+
+        $casesCollection = collect();
+
+        foreach($cases as $case){
+            
+            $count = Client::where('status', $case->id)->count();
+
+            $casesCollection->push(collect(['id' => $case->id, 'name' => $case->name, 'count' => $count] ));
+            
+        }
+
+        $data['cases_count'] = $casesCollection;
+        $data['clients']  = $clients;
+ 
+        return sendResponse($data);
     }
 
     /**
@@ -43,7 +65,8 @@ class ClientController extends Controller
         $newformat = date('Y-m-d',$time);
 
         Client::create([
-            'date' => $time,
+            'date' => $newformat,
+            'phone' => $request->phone,
             'name' => $request->name,
             'email' => $request->email,
             'address' => $request->address,
@@ -53,7 +76,6 @@ class ClientController extends Controller
             'area_id' => $request->area_id,
             'products_interest' => $request->products_interest,
             'company_level' => $request->company_level,
-            'status' => $request->status,
             'note' => $request->note,
             'created_by' => auth()->user()->name
         ]);
@@ -97,7 +119,8 @@ class ClientController extends Controller
         $newformat = date('Y-m-d',$time);
 
         Client::where('id', $request->id)->update([
-            'date' => $time,
+            'date' => $newformat,
+            'phone' => $request->phone,
             'name' => $request->name,
             'email' => $request->email,
             'address' => $request->address,
@@ -121,8 +144,27 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $user  = Client::findOrFail($request->id);
+        $user->active = false;
+        $user->save();
+
+        return sendResponse('success', trans('messages.removed_successfully'));
+    }
+
+    public function deletedClients(){
+
+        $data = [];
+
+        $clients = Client::where('active', false)
+                ->with('country', 'city', 'area')
+                ->paginate(15);
+
+        
+        $data['clients'] = $clients;
+
+        return sendResponse($data);
+
     }
 }

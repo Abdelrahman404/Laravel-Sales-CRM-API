@@ -5,12 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model
+class Status extends Model
 {
     use HasFactory;
 
-    protected $table = 'countries';
-    
     protected $guarded = [];
 
     protected $hidden = [
@@ -26,16 +24,4 @@ class Country extends Model
     {
         return $this->{'name_'.app()->getLocale()};
     }
-
-    public function cities(){
-
-        return $this->hasMany(City::class);
-    }
-
-    public function clients(){
-
-        return $this->hasMany(Client::class);
-    }
-
-
 }
