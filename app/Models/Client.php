@@ -26,5 +26,10 @@ class Client extends Model
 
         return $this->belongsTo(Area::class);
     }
+
+    public function calls(){
+
+        return $this->hasMany(Call::class);
+    }
     
 }

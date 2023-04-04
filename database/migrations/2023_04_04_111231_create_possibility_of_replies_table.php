@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCallsTable extends Migration
+class CreatePossibilityOfRepliesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateCallsTable extends Migration
      */
     public function up()
     {
-        Schema::create('calls', function (Blueprint $table) {
+        Schema::create('possibility_of_replies', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('client_id');
-            $table->date('date');
-            $table->string('hour');
-            $table->string('duration');
-            $table->integer('possibility_reply_id');
-            $table->string('created_by');
+            $table->string('name_en');
+            $table->string('name_ar');
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreateCallsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('calls');
+        Schema::dropIfExists('possibility_of_replies');
     }
 }

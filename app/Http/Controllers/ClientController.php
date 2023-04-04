@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateClientFormRequest;
 use App\Http\Requests\UpdateClientRequest;
+use App\Models\Call;
 use App\Models\Client;
 use App\Models\Status;
 use Illuminate\Http\Request;
@@ -89,11 +90,41 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $data = [];
+
+        $client = Client::with('country', 'city', 'area')->findOrFail($request->id);
+        
+        /*
+             TO DO Many to many relationship Client-Product
+        */
+
+        $calls = Call::where('client_id', $request->id)->get();
+        
+        $data['client'] = $client;
+        $data['calls'] = $calls; 
+        $data['cases_count'] = $this->casesCount();
+
+        return sendResponse($data);
     }
 
+    public function casesCount(){
+
+        $cases = Status::all();
+
+        $casesCollection = collect();
+
+        foreach($cases as $case){
+            
+            $count = Client::where('status', $case->id)->count();
+
+            $casesCollection->push(collect(['id' => $case->id, 'name' => $case->name, 'count' => $count] ));
+            
+        }
+
+        return $casesCollection;
+    }
     /**
      * Show the form for editing the specified resource.
      *

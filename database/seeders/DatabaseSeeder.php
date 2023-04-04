@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
 
             StatusTableSeeder::class,
             AuthUsersTableSeeder::class,
+            PossibilityOfReplyTableSeeder::class,
             CountryCityAreaTablesSeeder::class,
+
     
         ]);
     }

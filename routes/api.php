@@ -9,6 +9,8 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\CallController;
+use App\Http\Controllers\FollowUpController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,8 +62,19 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::get('/clients/deleted', [ClientController::Class, 'deletedClients']);
         route::post('/client/store', [ClientController::Class, 'store']);
         route::post('/client/update/', [ClientController::Class, 'update']);
-        // route::get('/user/{id}', [UserController::Class, 'show']);
+        route::get('/client/{id}', [ClientController::Class, 'show']);
         route::get('/client/delete/{id}', [ClientController::Class, 'destroy']);
+
+
+        // Follow-UP Routes
+        route::get('/follow-up', [FollowUpController::Class, 'index']);
+
+        // Calls Routes
+        route::get('/calls', [CallController::class, 'getClientCalls']);
+        route::post('/call/store', [CallController::class, 'store']);
+   
+
+
         
 });
 
