@@ -54,6 +54,7 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
 
         // Users routes
         route::get('/users', [UserController::Class, 'index']);
+        route::get('/sellers/all', [UserController::Class, 'allsellers']);
         route::get('/users/deleted', [UserController::Class, 'deletedUsers']);
         route::get('/user/{id}', [UserController::Class, 'show']);
         route::post('/user/store', [UserController::Class, 'store']);

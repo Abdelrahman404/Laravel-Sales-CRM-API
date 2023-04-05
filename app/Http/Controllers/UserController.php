@@ -163,4 +163,17 @@ class UserController extends Controller
 
         return sendResponse($users , trans('messages.success'));        
     }
+
+    public function allsellers(){
+
+        $data = [];
+
+        $sellers = User::where('type', 'seller')->get()->makeHidden(['image', 'type' ,'email']);
+
+        $data['sellers'] = $sellers;
+
+        return sendResponse($data);
+    }
+
+    
 }

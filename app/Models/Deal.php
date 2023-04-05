@@ -16,9 +16,6 @@ class Deal extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function deal(){
-
-        return $this->belongsTo(Deal::class);
-    }
+    
     
 }
