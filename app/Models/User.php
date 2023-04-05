@@ -21,6 +21,7 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'image',
+        'type'
     ];
 
     protected $appends = ['name'];
@@ -42,6 +43,9 @@ class User extends Authenticatable implements JWTSubject
         'name_en',
         'remember_token',
         'email_verified_at',
+        'created_at',
+        'updated_at',
+        'status',
     ];
 
     /**
@@ -76,6 +80,11 @@ class User extends Authenticatable implements JWTSubject
     public function userInfo(){
 
         return $this->hasMany(UserInfo::class);
+    }
+
+    public function comments(){
+
+        return $this->hasMany(Comment::class);
     }
 
 }

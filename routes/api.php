@@ -11,6 +11,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\FollowUpController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,10 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         // Calls Routes
         route::get('/calls', [CallController::class, 'getClientCalls']);
         route::post('/call/store', [CallController::class, 'store']);
+
+        // Comments Routes
+        route::get('/comments', [CommentController::class, 'getClientComments']);
+        route::post('/comment/store', [CommentController::class, 'store']);
    
 
 

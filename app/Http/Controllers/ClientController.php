@@ -101,7 +101,7 @@ class ClientController extends Controller
         */
 
         $calls = Call::where('client_id', $request->id)->get();
-        
+
         $data['client'] = $client;
         $data['calls'] = $calls; 
         $data['cases_count'] = $this->casesCount();
@@ -191,11 +191,10 @@ class ClientController extends Controller
         $clients = Client::where('active', false)
                 ->with('country', 'city', 'area')
                 ->paginate(15);
-
         
         $data['clients'] = $clients;
 
         return sendResponse($data);
-
+        
     }
 }

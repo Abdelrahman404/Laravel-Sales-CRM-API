@@ -31,5 +31,10 @@ class Client extends Model
 
         return $this->hasMany(Call::class);
     }
+
+    public function comments(){
+
+        return $this->hasMany(Comment::class);
+    }
     
 }
