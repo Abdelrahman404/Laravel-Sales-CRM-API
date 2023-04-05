@@ -12,6 +12,8 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CallController;
 use App\Http\Controllers\FollowUpController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DealController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +62,7 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
 
         // Clients Routes
         route::get('/clients', [ClientController::Class, 'index']);
+        route::get('/clients/all', [ClientController::Class, 'allClients']);
         route::get('/clients/deleted', [ClientController::Class, 'deletedClients']);
         route::post('/client/store', [ClientController::Class, 'store']);
         route::post('/client/update/', [ClientController::Class, 'update']);
@@ -77,6 +80,16 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         // Comments Routes
         route::get('/comments', [CommentController::class, 'getClientComments']);
         route::post('/comment/store', [CommentController::class, 'store']);
+
+        // Deal Routes
+        route::get('/client/deal', [DealController::class, 'store']);
+        
+        // Report Routes
+        route::get('/reports/client', [ReportController::class, 'clientReport']);
+        route::get('/reports/seller', [ReportController::class, 'sellerReport']);
+
+
+
    
 
 

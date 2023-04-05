@@ -24,4 +24,9 @@ class Status extends Model
     {
         return $this->{'name_'.app()->getLocale()};
     }
+
+    public function clients(){
+
+        return $this->hasMany(Client::class, 'status');
+    }
 }

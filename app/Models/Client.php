@@ -36,5 +36,15 @@ class Client extends Model
 
         return $this->hasMany(Comment::class);
     }
+
+    public function deals(){
+
+        return $this->hasMany(Deal::class);
+    }
+
+    public function status(){
+
+        return $this->belongsTo(Status::class, 'status');
+    }    
     
 }

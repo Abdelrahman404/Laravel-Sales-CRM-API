@@ -195,6 +195,15 @@ class ClientController extends Controller
         $data['clients'] = $clients;
 
         return sendResponse($data);
-        
+
+    }
+
+    public function allClients(){
+
+        $data = [];
+
+        $clients = Client::select('id', 'name')->get();
+    
+        return sendResponse($clients);
     }
 }

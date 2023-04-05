@@ -2,37 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
+use App\Models\Deal;
 use Illuminate\Http\Request;
 
-class CommentController extends Controller
+class DealController extends Controller
 {
-    public function getClientComments(Request $request){
-
-        $data = [];
-
-        $comments = Comment::with('user')->where('client_id', $request->client_id)->get();
-
-        return sendResponse($comments);
-
-    }
-
     public function store(Request $request){
 
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'client_id' => 'required|exists:clients,id',
-            'comment' => 'required|string' 
+            'product_id' => 'required|exists:products,id',
+            'amount' => 'required|string',
         ]);
 
-        Comment::create([
+        Deal::create([
             'user_id' => $request->user_id,
             'client_id' => $request->client_id,
-            'comment' => $request->comment,
+            'product_id' => $request->product_id,
+            'amount' => $request->amount,
         ]);
 
         return sendResponse(trans('messages.success'));
-
-        
     }
 }
