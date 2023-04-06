@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             StatusTableSeeder::class,
             AuthUsersTableSeeder::class,
             PossibilityOfReplyTableSeeder::class,
+            ProductsTableSeeder::class,
             CountryCityAreaTablesSeeder::class,
 
     

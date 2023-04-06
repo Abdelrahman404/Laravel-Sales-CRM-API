@@ -83,11 +83,13 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::post('/comment/store', [CommentController::class, 'store']);
 
         // Deal Routes
-        route::get('/client/deal', [DealController::class, 'store']);
+        route::post('/client/deal', [DealController::class, 'store']);
         
         // Report Routes
         route::get('/reports/client', [ReportController::class, 'clientReport']);
         route::get('/reports/seller', [ReportController::class, 'sellerReport']);
+
+
 
 
 

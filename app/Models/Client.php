@@ -42,7 +42,7 @@ class Client extends Model
         return $this->hasMany(Deal::class);
     }
 
-    public function status(){
+    public function case(){
 
         return $this->belongsTo(Status::class, 'status');
     }    
