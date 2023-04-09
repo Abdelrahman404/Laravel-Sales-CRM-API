@@ -43,7 +43,7 @@ class ReportController extends Controller
 
         $output = $this->$choosenFunction($user);
 
-        return $output;
+        return sendResponse($output);
 
     }
 

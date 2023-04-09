@@ -11,4 +11,24 @@ class Product extends Model
 
     protected $guarded = [];
 
+    
+    protected $hidden = [
+        'name_ar',
+        'name_en',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $appends = ['name'];
+    
+    public function getNameAttribute()
+    {
+        return $this->{'name_'.app()->getLocale()};
+    }
+    
+    public function clients(){
+
+        return $this->belongsToMany(Client::class, 'clients_stores', 'client_id', 'product_id');
+    }
+
 }

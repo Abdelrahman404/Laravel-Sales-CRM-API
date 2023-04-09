@@ -65,7 +65,7 @@ class ClientController extends Controller
 
         $newformat = date('Y-m-d',$time);
 
-        Client::create([
+       $client = Client::create([
             'date' => $newformat,
             'phone' => $request->phone,
             'name' => $request->name,
@@ -75,12 +75,13 @@ class ClientController extends Controller
             'country_id' => $request->country_id,
             'city_id' => $request->city_id,
             'area_id' => $request->area_id,
-            'products_interest' => $request->products_interest,
             'company_level' => $request->company_level,
             'note' => $request->note,
             'created_by' => auth()->user()->name
         ]);
 
+        $client->products()->attach($request->products_interest);
+        
         return sendResponse('success', trans('messages.added_successfully'));
     }
 
@@ -94,7 +95,7 @@ class ClientController extends Controller
     {
         $data = [];
 
-        $client = Client::with('country', 'city', 'area')->findOrFail($request->id);
+        $client = Client::with('country', 'city', 'area', 'products')->findOrFail($request->id);
         
         /*
              TO DO Many to many relationship Client-Product

@@ -45,6 +45,11 @@ class Client extends Model
     public function case(){
 
         return $this->belongsTo(Status::class, 'status');
-    }    
+    }  
+    
+    public function products(){
+
+        return $this->belongsToMany(Product::class, 'clients_products', 'client_id', 'product_id');
+    }
     
 }
