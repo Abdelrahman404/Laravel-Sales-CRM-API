@@ -16,7 +16,7 @@ class ReportController extends Controller
 
         $data = [];
 
-        $client = Client::with('status','country', 'city', 'area')
+        $client = Client::with('case','country', 'city', 'area')
                         ->withCount('calls')
                         ->findOrFail($request->client_id);
 
