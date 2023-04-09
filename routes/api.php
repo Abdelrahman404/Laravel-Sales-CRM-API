@@ -59,7 +59,7 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::get('/user/{id}', [UserController::Class, 'show']);
         route::post('/user/store', [UserController::Class, 'store']);
         route::post('/user/update/', [UserController::Class, 'update']);
-        route::get('/user/delete/{id}', [UserController::Class, 'destroy']);
+        route::post('/user/toggleActive/{id}', [UserController::Class, 'toggleActive']);
 
         // Clients Routes
         route::get('/clients', [ClientController::Class, 'index']);
@@ -68,10 +68,10 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::post('/client/store', [ClientController::Class, 'store']);
         route::post('/client/update/', [ClientController::Class, 'update']);
         route::get('/client/{id}', [ClientController::Class, 'show']);
-        route::get('/client/delete/{id}', [ClientController::Class, 'destroy']);
+        route::post('/client/toggleActive/{id}', [ClientController::Class, 'toggleActive']);
 
 
-        // Follow-UP Routes
+        // Follow-UP Routesfollow-up
         route::get('/follow-up', [FollowUpController::Class, 'index']);
 
         // Calls Routes

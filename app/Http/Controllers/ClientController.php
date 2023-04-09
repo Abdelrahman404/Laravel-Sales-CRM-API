@@ -176,13 +176,19 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function toggleActive(Request $request)
     {
         $user  = Client::findOrFail($request->id);
-        $user->active = false;
+        
+        if ($user->active == 0) {
+            $user->active = 1;
+        } else if ($user->active == 1) {
+            $user->active = 0;
+        }
+
         $user->save();
 
-        return sendResponse('success', trans('messages.removed_successfully'));
+        return sendResponse('success', trans('messages.success'));
     }
 
     public function deletedClients(){

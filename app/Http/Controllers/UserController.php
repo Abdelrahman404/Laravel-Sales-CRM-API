@@ -144,13 +144,19 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function toggleActive(Request $request)
     {
         $user  = User::findOrFail($request->id);
-        $user->status = 0;
+
+        if ($user->status == 0) {
+            $user->status = 1;
+        } else if ($user->status == 1) {
+            $user->status = 0;
+        }
+
         $user->save();
 
-        return sendResponse('success', trans('messages.removed_successfully'));
+        return sendResponse('success', trans('messages.success'));
     }
 
     public function deletedUsers(){
