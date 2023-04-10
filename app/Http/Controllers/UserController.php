@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserInfo;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -91,6 +92,10 @@ class UserController extends Controller
         $data = [];
         
         $user = User::with('userInfo')->findOrFail($request->id);
+
+        $user->makeVisible('name_ar', 'name_en', 'created_at');
+
+        $user->api_token = substr($request->header('authorization'), 7);
 
         $data['user'] = $user;
 

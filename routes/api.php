@@ -33,7 +33,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Auth Routes
 Route::controller(AuthController::class)->group(function () {
-    Route::group(['prefix' => 'v1'], function(){
+    Route::group(['prefix' => 'v1/{locale}'], function(){
         Route::post('login', 'login');
         Route::post('register', 'register');
         Route::post('logout', 'logout');
@@ -45,7 +45,6 @@ Route::controller(AuthController::class)->group(function () {
 
 
 Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language']], function () {
-
 
         // Location routes
         route::get('/countries', [CountryController::Class, 'countries']);
@@ -60,6 +59,7 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::post('/user/store', [UserController::Class, 'store']);
         route::post('/user/update/', [UserController::Class, 'update']);
         route::post('/user/toggleActive/{id}', [UserController::Class, 'toggleActive']);
+
 
         // Clients Routes
         route::get('/clients', [ClientController::Class, 'index']);

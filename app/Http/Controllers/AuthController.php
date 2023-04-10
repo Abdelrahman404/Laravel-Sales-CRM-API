@@ -30,15 +30,11 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = Auth::user();
-        return response()->json([
-                'status' => 'success',
-                'user' => $user,
-                'authorisation' => [
-                    'token' => $token,
-                    'type' => 'bearer',
-                ]
-            ]);
+        $data['user'] = auth()->user()->makeVisible('name_ar', 'name_en', 'created_at');
+        $data['api_token'] = $token;
+
+        return sendResponse($data, 'success');
+            
 
     }
 
@@ -70,10 +66,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Successfully logged out',
-        ]);
+        return sendResponse('success');
     }
 
     public function refresh()
