@@ -30,12 +30,14 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $data['user'] = auth()->user()->makeVisible('name_ar', 'name_en', 'created_at');
-        $data['api_token'] = $token;
+        $user = auth()->user()->makeVisible('name_ar', 'name_en', 'created_at');
 
+        $user->api_token = $token;
+
+        $data['user'] = $user; 
+      
         return sendResponse($data, 'success');
             
-
     }
 
     public function register(Request $request){

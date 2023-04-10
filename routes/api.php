@@ -59,6 +59,7 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::post('/user/store', [UserController::Class, 'store']);
         route::post('/user/update/', [UserController::Class, 'update']);
         route::post('/user/toggleActive/{id}', [UserController::Class, 'toggleActive']);
+        route::get('/get_my_profile',[UserController::class, 'getMyProfile']);
 
 
         // Clients Routes

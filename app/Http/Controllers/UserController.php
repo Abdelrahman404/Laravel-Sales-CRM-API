@@ -186,5 +186,20 @@ class UserController extends Controller
         return sendResponse($data);
     }
 
+    public function getMyProfile(Request $request){
+
+        $data = [];
+        
+        $user = User::with('userInfo')->findOrFail(auth()->user()->id);
+
+        $user->makeVisible('name_ar', 'name_en', 'created_at');
+
+        $user->api_token = substr($request->header('authorization'), 7);
+
+        $data['user'] = $user;
+
+        return response()->json($data);
+    }
+
     
 }
