@@ -9,7 +9,7 @@ use App\Models\Client;
 use App\Models\Status;
 use Illuminate\Http\Request;
 
-class ClientController extends Controller
+class ClientController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -39,7 +39,7 @@ class ClientController extends Controller
         $data['cases_count'] = $casesCollection;
         $data['clients']  = $clients;
  
-        return sendResponse($data);
+        return $this->sendResponse($data);
     }
 
     /**
@@ -82,7 +82,7 @@ class ClientController extends Controller
 
         $client->products()->attach($request->products_interest);
         
-        return sendResponse('success', trans('messages.added_successfully'));
+        return $this->sendResponse('success', trans('messages.added_successfully'));
     }
 
     /**
@@ -107,7 +107,7 @@ class ClientController extends Controller
         $data['calls'] = $calls; 
         $data['cases_count'] = $this->casesCount();
 
-        return sendResponse($data);
+        return $this->sendResponse($data);
     }
 
     public function casesCount(){
@@ -167,7 +167,7 @@ class ClientController extends Controller
             'created_by' => auth()->user()->name
         ]);
 
-        return sendResponse('success', trans('messages.updated_successfully'));
+        return $this->sendResponse('success', trans('messages.updated_successfully'));
     }
 
     /**
@@ -188,7 +188,7 @@ class ClientController extends Controller
 
         $user->save();
 
-        return sendResponse('success', trans('messages.success'));
+        return $this->sendResponse('success', trans('messages.success'));
     }
 
     public function deletedClients(){
@@ -201,7 +201,7 @@ class ClientController extends Controller
         
         $data['clients'] = $clients;
 
-        return sendResponse($data);
+        return $this->sendResponse($data);
 
     }
 
@@ -211,6 +211,6 @@ class ClientController extends Controller
 
         $clients = Client::select('id', 'name')->get();
     
-        return sendResponse($clients);
+        return $this->sendResponse($clients);
     }
 }

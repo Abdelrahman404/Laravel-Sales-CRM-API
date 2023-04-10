@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Call;
 use Illuminate\Http\Request;
+use Validator;
 
-class CallController extends Controller
+class CallController extends BaseController
 {
     public function getClientCalls(Request $request){
 
@@ -13,12 +14,12 @@ class CallController extends Controller
             
             $data['calls'] = $calls;
 
-            return sendResponse($data);
+            $this->sendResponse($data);
     }
 
     public function store(Request $request){
 
-        $request->validate([
+        $validator =  Validator::make($request->all(), [
             'date' => 'required|date',
             'hour' => 'required|string',
             'duration' => 'required|string',
@@ -26,11 +27,16 @@ class CallController extends Controller
             'client_id' => 'required|exists:clients,id'
         ]);
 
+        if ($validator->fails()){
+
+            return $this->sendError($validator->errors());
+        }
+
         $time = strtotime($request->date);
 
         $newformat = date('Y-m-d',$time);
 
-        Call::create([
+        $call = Call::create([
             'date' =>  $newformat,
             'client_id' => $request->client_id,
             'hour' => $request->hour,
@@ -39,7 +45,7 @@ class CallController extends Controller
             'created_by' => auth()->user()->name,
         ]);
 
-        return sendResponse('success');
+        return $this->sendResponse(trans('messages.success'));
 
     }
 }

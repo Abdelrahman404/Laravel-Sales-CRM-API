@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -25,7 +25,7 @@ class UserController extends Controller
 
         $data['users'] = $users;
 
-        return sendResponse($users , trans('messages.success'));
+        return $this->sendResponse($users , trans('messages.success'));
     }
 
     /**
@@ -76,7 +76,7 @@ class UserController extends Controller
                 'target' => $detail['target'],
         ]);
 
-        return sendResponse($user, trans('messages.added_successfully'));
+        return $this->sendResponse($user, trans('messages.added_successfully'));
     }
 
     }
@@ -89,17 +89,14 @@ class UserController extends Controller
      */
     public function show(Request $request)
     {
-        $data = [];
-        
+
         $user = User::with('userInfo')->findOrFail($request->id);
 
         $user->makeVisible('name_ar', 'name_en', 'created_at');
 
         $user->api_token = substr($request->header('authorization'), 7);
 
-        $data['user'] = $user;
-
-        return response()->json($data);
+        return $this->sendResponse($user);
     }
 
     /**
@@ -140,7 +137,7 @@ class UserController extends Controller
                 'type' => $data['type'],
         ]);
 
-        return sendResponse($user, trans('messages.updated_successfully'));
+        return $this->sendResponse($user, trans('messages.updated_successfully'));
     }
 
     /**
@@ -161,7 +158,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return sendResponse('success', trans('messages.success'));
+        return $this->sendResponse('success', trans('messages.success'));
     }
 
     public function deletedUsers(){
@@ -172,7 +169,7 @@ class UserController extends Controller
 
         $data['users'] = $users;
 
-        return sendResponse($users , trans('messages.success'));        
+        return $this->sendResponse($users , trans('messages.success'));        
     }
 
     public function allsellers(){
@@ -183,7 +180,7 @@ class UserController extends Controller
 
         $data['sellers'] = $sellers;
 
-        return sendResponse($data);
+        return $this->sendResponse($data);
     }
 
     public function getMyProfile(Request $request){
@@ -197,7 +194,7 @@ class UserController extends Controller
         $user->api_token = substr($request->header('authorization'), 7);
 
 
-       return sendResponse($user);
+       return $this->sendResponse($user);
     }
 
     

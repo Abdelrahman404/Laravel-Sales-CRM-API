@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Validator;
 use App\Models\User;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
 
     public function __construct()
@@ -16,18 +17,21 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
+      
+        $validator =  Validator::make($request->all(), [
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
+        if ($validator->fails()){
+
+            return $this->sendError($validator->errors());
+        }
         $credentials = $request->only('email', 'password');
 
         $token = Auth::attempt($credentials);
+        
         if (!$token) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 401);
+            return $this->sendError('error',401);          
         }
 
         $user = auth()->user()->makeVisible('name_ar', 'name_en', 'created_at');
@@ -35,7 +39,7 @@ class AuthController extends Controller
         $user->api_token = $token;
 
 
-        return sendResponse($user, 'success');
+        return $this->sendResponse($user, 'success');
             
     }
 

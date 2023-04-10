@@ -10,7 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class ReportController extends Controller
+class ReportController extends BaseController
 {
     public function clientReport(Request $request){
 
@@ -22,7 +22,7 @@ class ReportController extends Controller
 
         $data['client'] = $client;
 
-        return sendResponse($data);
+        return $this->sendResponse($data);
     }
 
     public function sellerReport(Request $request){
@@ -43,7 +43,7 @@ class ReportController extends Controller
 
         $output = $this->$choosenFunction($user);
 
-        return sendResponse($output);
+        return $this->sendResponse($output);
 
     }
 

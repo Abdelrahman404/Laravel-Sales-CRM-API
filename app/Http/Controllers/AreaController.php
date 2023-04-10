@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use Illuminate\Http\Request;
 
-class AreaController extends Controller
+class AreaController extends BaseController
 {
     
     public function areas(Request $request){
@@ -16,6 +16,6 @@ class AreaController extends Controller
 
         $data['areas'] = $areas;
 
-        return response()->json($data);
+        return $this->sendResponse($data);
     }
 }

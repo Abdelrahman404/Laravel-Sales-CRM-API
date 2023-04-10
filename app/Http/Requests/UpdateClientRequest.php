@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
 class UpdateClientRequest extends FormRequest
 {
@@ -41,4 +43,9 @@ class UpdateClientRequest extends FormRequest
             'note' => 'nullable',
         ];
     }
+
+    public function failedValidation(Validator $validator) { 
+        //write your bussiness logic here otherwise it will give same old JSON response
+       throw new HttpResponseException(sendError($validator->errors())); 
+   }
 }

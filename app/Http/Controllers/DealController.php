@@ -5,17 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Deal;
 use Illuminate\Http\Request;
+use Validator;
 
-class DealController extends Controller
+class DealController extends BaseController
 {
     public function store(Request $request){
 
-        $request->validate([
+        $validator =  Validator::make($request->all(), [
             'user_id' => 'required|exists:users,id',
             'client_id' => 'required|exists:clients,id',
             'product_id' => 'required|exists:products,id',
             'amount' => 'required|string',
         ]);
+        if ($validator->fails()){
+
+            return $this->sendError($validator->errors());
+        }
 
         // Getting client country that deal has been done at.
         $client = Client::find($request->client_id);
@@ -29,6 +34,6 @@ class DealController extends Controller
             'country_id' => $country_id
         ]);
 
-        return sendResponse(trans('messages.success'));
+        return $this->sendResponse(trans('messages.success'));
     }
 }

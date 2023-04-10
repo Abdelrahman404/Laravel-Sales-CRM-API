@@ -6,7 +6,7 @@ use App\Models\Client;
 use App\Models\Status;
 use Illuminate\Http\Request;
 
-class FollowUpController extends Controller
+class FollowUpController extends BaseController
 {
     public function index(Request $request){
         
@@ -35,7 +35,7 @@ class FollowUpController extends Controller
         $data['clients']  = $clients;
         $data['cases_count'] = $casesCollection;
 
-        return sendResponse($data);
+        return $this->sendResponse($data);
         
     }
 }

@@ -7,7 +7,7 @@ use App\Models\City;
 use App\Models\Country;
 use Illuminate\Http\Request;
 
-class LocationController extends Controller
+class LocationController extends BaseController
 {
 
     /**

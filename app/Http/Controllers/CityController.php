@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use Illuminate\Http\Request;
 
-class CityController extends Controller
+class CityController extends BaseController
 {
     
     public function cities(Request $request){
@@ -14,8 +14,6 @@ class CityController extends Controller
 
         $cities = City::where('country_id', $request->id)->get();
 
-        $data['cities'] = $cities;
-
-        return response()->json($data);
+        return $this->sendResponse($cities);
     }
 }
