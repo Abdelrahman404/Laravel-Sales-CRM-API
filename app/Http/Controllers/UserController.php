@@ -196,9 +196,8 @@ class UserController extends Controller
 
         $user->api_token = substr($request->header('authorization'), 7);
 
-        $data['user'] = $user;
 
-        return response()->json($data);
+       return sendResponse($user);
     }
 
     

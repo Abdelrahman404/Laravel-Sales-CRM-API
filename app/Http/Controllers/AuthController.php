@@ -34,9 +34,8 @@ class AuthController extends Controller
 
         $user->api_token = $token;
 
-        $data['user'] = $user; 
-      
-        return sendResponse($data, 'success');
+
+        return sendResponse($user, 'success');
             
     }
 
