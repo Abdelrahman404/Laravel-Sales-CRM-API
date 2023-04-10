@@ -137,6 +137,21 @@ class UserController extends BaseController
                 'type' => $data['type'],
         ]);
 
+        // If user is not admin (seller)
+        if($request->exists('details')){
+
+            foreach($data['details'] as $detail)
+
+            $info = UserInfo::where('id', $detail['id'])->update([
+                'user_id' => $data['id'],
+                'country_id' => $detail['country_id'],
+                'comission' => $detail['comission'],
+                'target' => $detail['target'],
+         ]);
+       }
+        
+      
+                
         return $this->sendResponse($user, trans('messages.updated_successfully'));
     }
 
