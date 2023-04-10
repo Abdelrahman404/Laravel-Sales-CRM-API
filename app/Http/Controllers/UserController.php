@@ -65,7 +65,7 @@ class UserController extends BaseController
         ]);
 
         // If user is not admin (seller)
-        if(count($data['details']) > 0){
+        if($request->exists('details')){
 
             foreach($data['details'] as $detail)
 
@@ -76,9 +76,9 @@ class UserController extends BaseController
                 'target' => $detail['target'],
         ]);
 
-        return $this->sendResponse($user, trans('messages.added_successfully'));
+      
     }
-
+        return $this->sendResponse($user, trans('messages.added_successfully'));
     }
 
     /**
