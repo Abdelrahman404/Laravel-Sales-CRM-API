@@ -81,6 +81,7 @@ class ClientController extends BaseController
             'city_id' => $request->city_id,
             'area_id' => $request->area_id,
             'company_level' => $request->company_level,
+            'company_size' => $request->company_size,
             'note' => $request->note,
             'created_by' => auth()->user()->name
         ]);
@@ -100,7 +101,7 @@ class ClientController extends BaseController
     {
         $data = [];
 
-        $client = Client::with('country', 'city', 'area', 'products','calls', 'comments')->findOrFail($request->id);
+        $client = Client::with('country', 'city', 'area', 'products','calls', 'comments', 'products')->findOrFail($request->id);
         
         $calls = Call::where('client_id', $request->id)->get();
 
@@ -163,6 +164,7 @@ class ClientController extends BaseController
             'area_id' => $request->area_id,
             'products_interest' => json_encode($request->products_interest),
             'company_level' => $request->company_level,
+            'company_size' => $request->company_size,
             'status' => $request->status,
             'note' => $request->note,
             'created_by' => auth()->user()->name
@@ -210,8 +212,24 @@ class ClientController extends BaseController
 
         $data = [];
 
-        $clients = Client::select('id', 'name')->get();
-    
-        return $this->sendResponse($clients);
+        $clients = Client::select('id', 'name', 'phone', 'email')->get();
+
+        $cases = Status::all();
+
+        $casesCollection = collect();
+
+        foreach($cases as $case){
+            
+            $count = Client::where('status', $case->id)->count();
+
+            $casesCollection->push(collect(['id' => $case->id, 'name' => $case->name, 'count' => $count] ));
+            
+        }
+
+        $data['cases'] = $casesCollection;
+
+        $data['clients'] = $clients;
+
+        return $this->sendResponse($data);
     }
 }

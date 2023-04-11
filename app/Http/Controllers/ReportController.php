@@ -115,6 +115,7 @@ class ReportController extends BaseController
         
         $output['cases'] = $casesCollection;
         
+        $output['user'] = $user;
         return $output;
     }
 

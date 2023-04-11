@@ -37,6 +37,7 @@ class CreateClientFormRequest extends FormRequest
             'area_id' =>'nullable|exists:areas,id',
             'products_interest' => 'nullable',
             'company_level' => 'nullable',
+            'company_size' => 'nullable',
             'note' => 'nullable',
         ];
     }
