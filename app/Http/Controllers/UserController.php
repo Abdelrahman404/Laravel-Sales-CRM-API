@@ -10,20 +10,28 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class UserController extends BaseController
 {
+    public $rows = 15;
+
+    public $active = 1;
+
+    public $word;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = [];
+        if(isset($request->rows)){ $this->rows = $request->rows;}
 
-        $users = User::where('status', 1)->paginate(10);
+        if(isset($request->active)){ $this->active = $request->active;}
+  
+        if(isset($request->word)){ $this->word = $request->word;}
+
+        $users = User::where('name_'.app()->getLocale(),'like',"%{$this->word}%")
+                ->where('status',$this->active )->paginate($this->rows);
         
         $users->makeVisible(['name_en', 'name_ar']);
-
-        $data['users'] = $users;
 
         return $this->sendResponse($users , trans('messages.success'));
     }
@@ -49,17 +57,17 @@ class UserController extends BaseController
      
         $data = $request->only(['name_en', 'name_ar', 'password', 'type', 'details', 'email']);
 
-        if($request->hasFile('image')){
-            $imageName = uploadFile($request->file('image'));
+        if($request->exists('image')){
+            $file = $this->uploadBase64Image($request->image,'images');
+            $fileName = $file['url'];
         }else{
-            $fileName = 'avatar.png';
+            $fileName = '/storage/images/avatar.png';
         }
-
         $user = User::create([
                 'email' => $data['email'],
                 'name_en'=> $data['name_en'],
                 'name_ar'=> $data['name_ar'],
-                'image' => env('APP_URL') . '/storage' . '/' .$fileName,
+                'image' => $fileName,
                 'password' => $data['password'],
                 'type' => $data['type'],
         ]);
@@ -89,7 +97,6 @@ class UserController extends BaseController
      */
     public function show(Request $request)
     {
-
         $user = User::with('userInfo')->findOrFail($request->id);
 
         $user->makeVisible('name_ar', 'name_en', 'created_at');
@@ -121,18 +128,18 @@ class UserController extends BaseController
     {
        $data = $request->only(['id', 'name_en', 'name_ar', 'password', 'type', 'details', 'email']);
 
-        if($request->hasFile('image')){
-            $fileName = uploadFile($request->file('image'));
-            $filePath = env('APP_URL') . '/storage' . '/' .$fileName;
+       if($request->exists('image')){
+            $file = $this->uploadBase64Image($request->image,'images');
+            $fileName = $file['url'];
         }else{
-            $filePath = User::find($data['id'])->image;
+            $fileName = User::find($data['id'])->image;
         }
-
+        
         $user = User::where('id', $data['id'])->update([
                 'email' => $data['email'],
                 'name_en'=> $data['name_en'],
                 'name_ar'=> $data['name_ar'],
-                'image' => $filePath,
+                'image' => $fileName,
                 'password' => $data['password'],
                 'type' => $data['type'],
         ]);
@@ -176,7 +183,7 @@ class UserController extends BaseController
 
         $data = [];
 
-        $sellers = User::where('type', 'seller')->get()->makeHidden(['image', 'type' ,'email']);
+        $sellers = User::where('type', 'seller')->whereHas('userInfo')->get()->makeHidden(['image', 'type' ,'email']);
 
         $data['sellers'] = $sellers;
 

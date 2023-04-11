@@ -60,18 +60,20 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::post('/user/update/', [UserController::Class, 'update']);
         route::post('/user/toggleActive/{id}', [UserController::Class, 'toggleActive']);
         route::get('/get_my_profile',[UserController::class, 'getMyProfile']);
+    
+
 
 
         // Clients Routes
         route::get('/clients', [ClientController::Class, 'index']);
+        route::get('/clients/create', [ClientController::class, 'create']);
         route::get('/clients/all', [ClientController::Class, 'allClients']);
         route::get('/clients/deleted', [ClientController::Class, 'deletedClients']);
         route::post('/client/store', [ClientController::Class, 'store']);
         route::post('/client/update/', [ClientController::Class, 'update']);
         route::get('/client/{id}', [ClientController::Class, 'show']);
         route::post('/client/toggleActive/{id}', [ClientController::Class, 'toggleActive']);
-
-
+    
         // Follow-UP Routesfollow-up
         route::get('/follow-up', [FollowUpController::Class, 'index']);
 

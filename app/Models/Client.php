@@ -13,6 +13,10 @@ class Client extends Model
 
     protected $guarded = [];
 
+    protected $hidden = [
+        'products_interest',
+
+    ];
     public function country(){
 
         return $this->belongsTo(Country::class, 'country_id');
