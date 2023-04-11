@@ -10,6 +10,7 @@ use App\Models\Country;
 use App\Models\Product;
 use App\Models\Status;
 use Illuminate\Http\Request;
+use Validator;
 
 class ClientController extends BaseController
 {
@@ -36,6 +37,7 @@ class ClientController extends BaseController
         $clients = Client::where('name','like',"%{$this->word}%")
                         ->where('active', $this->active)
                         ->with('country', 'city', 'area')
+                        ->latest()
                         ->paginate($this->rows);
  
         return $this->sendResponse($clients);
@@ -71,6 +73,7 @@ class ClientController extends BaseController
         $newformat = date('Y-m-d',$time);
 
        $client = Client::create([
+            'status' => 0, // brand new client
             'date' => $newformat,
             'phone' => $request->phone,
             'name' => $request->name,
@@ -231,5 +234,24 @@ class ClientController extends BaseController
         $data['clients'] = $clients;
 
         return $this->sendResponse($data);
+    }
+
+    public function updateStatus(Request $request){
+
+        $validator =  Validator::make($request->all(), [
+            'client_id' => 'required|exists:clients,id',
+            'status' => 'required|integer|between:1,7'
+        ]);
+
+        if ($validator->fails()){
+
+            return $this->sendError($validator->errors());
+        }
+
+        Client::where('id', $request->client_id)->update([
+            'status' => $request->status
+        ]);
+
+        return $this->sendResponse(trans('messages.success'));
     }
 }

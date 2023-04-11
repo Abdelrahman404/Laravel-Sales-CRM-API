@@ -29,6 +29,7 @@ class FollowUpController extends BaseController
                         ->with(['country', 'city', 'area'])
                         ->withCount('calls')
                         ->withSum('deals', 'amount')
+                        ->latest()
                         ->paginate($this->rows);
 
         $cases = Status::all();

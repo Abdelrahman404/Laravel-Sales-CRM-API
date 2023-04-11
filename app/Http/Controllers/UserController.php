@@ -29,7 +29,7 @@ class UserController extends BaseController
         if(isset($request->word)){ $this->word = $request->word;}
 
         $users = User::where('name_'.app()->getLocale(),'like',"%{$this->word}%")
-                ->where('status',$this->active )->paginate($this->rows);
+                ->where('status',$this->active )->latest()->paginate($this->rows);
         
         $users->makeVisible(['name_en', 'name_ar']);
 
@@ -198,7 +198,7 @@ class UserController extends BaseController
 
         $data = [];
 
-        $sellers = User::where('type', 'seller')->whereHas('userInfo')->get()->makeHidden(['image', 'type' ,'email']);
+        $sellers = User::where('type', 'seller')->whereHas('userInfo')->latest()->get()->makeHidden(['image', 'type' ,'email']);
 
         $data['sellers'] = $sellers;
 

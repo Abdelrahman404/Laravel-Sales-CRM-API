@@ -16,6 +16,7 @@ class StatusTableSeeder extends Seeder
     public function run()
     {
         
+        Status::truncate();
         $json = Storage::disk('local')->get('/JSON/cases.json');
         $cases = json_decode($json, true);
         foreach ($cases as $case) {

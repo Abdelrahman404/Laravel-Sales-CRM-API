@@ -51,6 +51,12 @@ class ReportController extends BaseController
 
         $output = [];
         
+        $user->report_duration = Carbon::today()->format('Y-m-d');
+
+        $user->makeHidden(['userInfo', 'name_en', 'name_ar', 'type',]);
+
+        $output['user'] = $user;
+
         $output['calls'] = Call::where('created_by', $user->name_en)
                             ->orWhere('created_by', $user->name_ar)
                             ->where('created_at', '>=', Carbon::today())
@@ -115,13 +121,18 @@ class ReportController extends BaseController
         
         $output['cases'] = $casesCollection;
         
-        $output['user'] = $user;
         return $output;
     }
 
     public function lastWeekReport($user){
 
         $output = [];
+
+        $user->report_duration = Carbon::now()->subWeek()->startOfWeek()->format('Y-m-d') . ' - ' .  Carbon::now()->subWeek()->endOfWeek()->format('Y-m-d');
+
+        $user->makeHidden(['userInfo', 'name_en', 'name_ar', 'type',]);
+
+        $output['user'] = $user;
 
         $output['calls'] = Call::where('created_by', $user->name_en)->orWhere('created_by', $user->name_ar)
                          ->whereBetween('created_at',[Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])        
@@ -193,6 +204,12 @@ class ReportController extends BaseController
 
         $output = [];
 
+        $user->report_duration = Carbon::now()->subMonth()->startOfMonth()->format('Y-m-d') . ' - ' .   Carbon::now()->subMonth()->endOfMonth()->format('Y-m-d');
+
+        $user->makeHidden(['userInfo', 'name_en', 'name_ar', 'type',]);
+
+        $output['user'] = $user;
+
         $output['calls'] = Call::where('created_by', $user->name_en)->orWhere('created_by', $user->name_ar)
                          ->whereBetween('created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
                          ->count();
@@ -263,16 +280,22 @@ class ReportController extends BaseController
 
         $output = [];
 
+        $user->report_duration = Carbon::now()->subMonth(3)->format('Y-m-d') . ' - ' .  Carbon::now()->format('Y-m-d');
+
+        $user->makeHidden(['userInfo', 'name_en', 'name_ar', 'type',]);
+
+        $output['user'] = $user;
+
         $output['calls'] = Call::where('created_by', $user->name_en)->orWhere('created_by', $user->name_ar)
-                         ->whereBetween('created_at', [Carbon::now()->subMonth(3)->startOfMonth(), Carbon::now()->subMonth(3)->endOfMonth()])
+                         ->whereBetween('created_at', [Carbon::now()->subMonth(3), Carbon::now()])
                          ->count();
 
         $output['registered_clients'] = Client::where('created_by', $user->name_en)->orWhere('created_by', $user->name_ar)
-                                        ->whereBetween('created_at', [Carbon::now()->subMonth(3)->startOfMonth(), Carbon::now()->subMonth(3)->endOfMonth()])
+                                        ->whereBetween('created_at', [Carbon::now()->subMonth(3), Carbon::now()])
                                         ->count();
         
         // Getting user deals at this period
-        $deals = Deal::whereBetween('created_at',[Carbon::now()->subMonth(3)->startOfMonth(), Carbon::now()->subMonth(3)->endOfMonth()])->get();
+        $deals = Deal::whereBetween('created_at',[Carbon::now()->subMonth(3), Carbon::now()])->get();
 
         foreach($user->userInfo as $userInfo){
 
@@ -314,7 +337,7 @@ class ReportController extends BaseController
 
         foreach($cases as $case){
             
-            $count = Client::whereBetween('created_at',[Carbon::now()->subMonth(3)->startOfMonth(), Carbon::now()->subMonth(3)->endOfMonth()])
+            $count = Client::whereBetween('created_at',[Carbon::now()->subMonth(3), Carbon::now()])
                             ->where('created_by', $user->name_en)
                             ->orWhere('created_by', $user->name_ar)
                             ->where('status', $case->id)
@@ -332,17 +355,23 @@ class ReportController extends BaseController
     public function lastSixMonths($user){
 
         $output = [];
+        
+        $user->makeHidden(['userInfo', 'name_en', 'name_ar', 'type',]);
+
+        $user->report_duration = Carbon::now()->subMonth(6)->format('Y-m-d') . ' - ' .  Carbon::now()->format('Y-m-d');
+
+        $output['user'] = $user;
 
         $output['calls'] = Call::where('created_by', $user->name_en)->orWhere('created_by', $user->name_ar)
-                         ->whereBetween('created_at', [Carbon::now()->subMonth(6)->startOfMonth(), Carbon::now()->subMonth(6)->endOfMonth()])
+                         ->whereBetween('created_at', [Carbon::now()->subMonth(6), Carbon::now()])
                          ->count();
 
         $output['registered_clients'] = Client::where('created_by', $user->name_en)->orWhere('created_by', $user->name_ar)
-                                        ->whereBetween('created_at', [Carbon::now()->subMonth(6)->startOfMonth(), Carbon::now()->subMonth(6)->endOfMonth()])
+                                        ->whereBetween('created_at', [Carbon::now()->subMonth(6), Carbon::now()])
                                         ->count();
         
         // Getting user deals at this period
-        $deals = Deal::whereBetween('created_at',[Carbon::now()->subMonth(6)->startOfMonth(), Carbon::now()->subMonth(6)->endOfMonth()])->get();
+        $deals = Deal::whereBetween('created_at',[Carbon::now()->subMonth(6), Carbon::now()])->get();
 
         foreach($user->userInfo as $userInfo){
 
@@ -384,7 +413,7 @@ class ReportController extends BaseController
 
         foreach($cases as $case){
             
-            $count = Client::whereBetween('created_at',[Carbon::now()->subMonth(6)->startOfMonth(), Carbon::now()->subMonth(6)->endOfMonth()])
+            $count = Client::whereBetween('created_at',[Carbon::now()->subMonth(6), Carbon::now()])
                             ->where('created_by', $user->name_en)
                             ->orWhere('created_by', $user->name_ar)
                             ->where('status', $case->id)
@@ -403,16 +432,22 @@ class ReportController extends BaseController
 
         $output = [];
 
+        $user->makeHidden(['userInfo', 'name_en', 'name_ar', 'type',]);
+
+        $user->report_duration = Carbon::now()->subMonth(9)->format('Y-m-d') . ' - ' .  Carbon::now()->format('Y-m-d');
+
+        $output['user'] = $user;
+
         $output['calls'] = Call::where('created_by', $user->name_en)->orWhere('created_by', $user->name_ar)
-                         ->whereBetween('created_at', [Carbon::now()->subMonth(9)->startOfMonth(), Carbon::now()->subMonth(9)->endOfMonth()])
+                         ->whereBetween('created_at', [Carbon::now()->subMonth(9), Carbon::now()])
                          ->count();
 
         $output['registered_clients'] = Client::where('created_by', $user->name_en)->orWhere('created_by', $user->name_ar)
-                                        ->whereBetween('created_at', [Carbon::now()->subMonth(9)->startOfMonth(), Carbon::now()->subMonth(9)->endOfMonth()])
+                                        ->whereBetween('created_at', [Carbon::now()->subMonth(9), Carbon::now()])
                                         ->count();
         
         // Getting user deals at this period
-        $deals = Deal::whereBetween('created_at',[Carbon::now()->subMonth(9)->startOfMonth(), Carbon::now()->subMonth(9)->endOfMonth()])->get();
+        $deals = Deal::whereBetween('created_at',[Carbon::now()->subMonth(9), Carbon::now()])->get();
 
         foreach($user->userInfo as $userInfo){
 
@@ -454,7 +489,7 @@ class ReportController extends BaseController
 
         foreach($cases as $case){
             
-            $count = Client::whereBetween('created_at',[Carbon::now()->subMonth(9)->startOfMonth(), Carbon::now()->subMonth(9)->endOfMonth()])
+            $count = Client::whereBetween('created_at',[Carbon::now()->subMonth(9), Carbon::now()])
                             ->where('created_by', $user->name_en)
                             ->orWhere('created_by', $user->name_ar)
                             ->where('status', $case->id)
@@ -470,8 +505,14 @@ class ReportController extends BaseController
     }
 
     public function lastYear($user){
-
+        
         $output = [];
+
+        $user->makeHidden(['userInfo', 'name_en', 'name_ar', 'type',]);
+
+        $user->report_duration = Carbon::now()->subMonth(12)->format('Y-m-d') . ' - ' .  Carbon::now()->format('Y-m-d');
+
+        $output['user'] = $user;
 
         $output['calls'] = Call::where('created_by', $user->name_en)->orWhere('created_by', $user->name_ar)
                          ->whereYear('created_at', now()->subYear()->year)

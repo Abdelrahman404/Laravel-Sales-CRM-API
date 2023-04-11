@@ -90,5 +90,9 @@ class User extends Authenticatable implements JWTSubject
 
         return $this->hasMany(Deal::class);
     }
+    protected function serializeDate($date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 
 }
