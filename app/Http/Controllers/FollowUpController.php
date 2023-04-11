@@ -8,16 +8,28 @@ use Illuminate\Http\Request;
 
 class FollowUpController extends BaseController
 {
+
+    public $rows = 15;
+
+    public $word;
+
+    public $status = 1;
+
     public function index(Request $request){
         
-        // If not status sent from client default will be 1 (Lead & عميل محتمل)
-        $status = ($request->status) ? $request->status : 1;
+        if(isset($request->rows)){ $this->rows = $request->rows;}
 
-        $clients = Client::where('active', true)
-                        ->where('status', $status)
+        if(isset($request->status)){ $this->status = $request->status;}
+  
+        if(isset($request->word)){ $this->word = $request->word;}
+
+        $clients = Client::where('name','like',"%{$this->word}%")
+                        ->where('active', true)
+                        ->where('status', $this->status)
                         ->with(['country', 'city', 'area'])
                         ->withCount('calls')
-                        ->paginate(15);
+                        ->withSum('deals', 'amount')
+                        ->paginate($this->rows);
 
         $cases = Status::all();
 

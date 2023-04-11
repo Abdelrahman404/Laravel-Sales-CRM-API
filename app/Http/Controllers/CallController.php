@@ -45,7 +45,8 @@ class CallController extends BaseController
             'created_by' => auth()->user()->name,
         ]);
 
-        return $this->sendResponse(trans('messages.success'));
+        return $this->sendResponse($call);
+        
 
     }
 }

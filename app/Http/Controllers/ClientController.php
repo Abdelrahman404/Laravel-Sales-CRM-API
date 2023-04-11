@@ -6,11 +6,19 @@ use App\Http\Requests\CreateClientFormRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Call;
 use App\Models\Client;
+use App\Models\Country;
+use App\Models\Product;
 use App\Models\Status;
 use Illuminate\Http\Request;
 
 class ClientController extends BaseController
 {
+
+    public $rows = 15;
+
+    public $active = 1;
+
+    public $word;
     /**
      * Display a listing of the resource.
      *
@@ -18,28 +26,19 @@ class ClientController extends BaseController
      */
     public function index(Request $request)
     { 
-        $data = [];
+  
+      if(isset($request->rows)){ $this->rows = $request->rows;}
 
-        $clients = Client::where('active', true)
+      if(isset($request->active)){ $this->active = $request->active;}
+
+      if(isset($request->word)){ $this->word = $request->word;}
+
+        $clients = Client::where('name','like',"%{$this->word}%")
+                        ->where('active', $this->active)
                         ->with('country', 'city', 'area')
-                        ->paginate(15);
-
-        $cases = Status::all();
-
-        $casesCollection = collect();
-
-        foreach($cases as $case){
-            
-            $count = Client::where('status', $case->id)->count();
-
-            $casesCollection->push(collect(['id' => $case->id, 'name' => $case->name, 'count' => $count] ));
-            
-        }
-
-        $data['cases_count'] = $casesCollection;
-        $data['clients']  = $clients;
+                        ->paginate($this->rows);
  
-        return $this->sendResponse($data);
+        return $this->sendResponse($clients);
     }
 
     /**
@@ -49,7 +48,13 @@ class ClientController extends BaseController
      */
     public function create()
     {
-        //
+        $data = [];
+
+        $data['countries'] = Country::all();
+
+        $data['products'] = Product::all();
+
+        return $this->sendResponse($data);
     }
 
     /**
@@ -76,6 +81,7 @@ class ClientController extends BaseController
             'city_id' => $request->city_id,
             'area_id' => $request->area_id,
             'company_level' => $request->company_level,
+            'company_size' => $request->company_size,
             'note' => $request->note,
             'created_by' => auth()->user()->name
         ]);
@@ -95,12 +101,8 @@ class ClientController extends BaseController
     {
         $data = [];
 
-        $client = Client::with('country', 'city', 'area', 'products')->findOrFail($request->id);
+        $client = Client::with('country', 'city', 'area', 'products','calls', 'comments', 'products')->findOrFail($request->id);
         
-        /*
-             TO DO Many to many relationship Client-Product
-        */
-
         $calls = Call::where('client_id', $request->id)->get();
 
         $data['client'] = $client;
@@ -162,6 +164,7 @@ class ClientController extends BaseController
             'area_id' => $request->area_id,
             'products_interest' => json_encode($request->products_interest),
             'company_level' => $request->company_level,
+            'company_size' => $request->company_size,
             'status' => $request->status,
             'note' => $request->note,
             'created_by' => auth()->user()->name
@@ -209,8 +212,24 @@ class ClientController extends BaseController
 
         $data = [];
 
-        $clients = Client::select('id', 'name')->get();
-    
-        return $this->sendResponse($clients);
+        $clients = Client::select('id', 'name', 'phone', 'email')->get();
+
+        $cases = Status::all();
+
+        $casesCollection = collect();
+
+        foreach($cases as $case){
+            
+            $count = Client::where('status', $case->id)->count();
+
+            $casesCollection->push(collect(['id' => $case->id, 'name' => $case->name, 'count' => $count] ));
+            
+        }
+
+        $data['cases'] = $casesCollection;
+
+        $data['clients'] = $clients;
+
+        return $this->sendResponse($data);
     }
 }

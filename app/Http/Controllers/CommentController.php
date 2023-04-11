@@ -21,7 +21,6 @@ class CommentController extends BaseController
     public function store(Request $request){
 
         $validator =  Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
             'client_id' => 'required|exists:clients,id',
             'comment' => 'required|string' 
         ]);
@@ -31,13 +30,15 @@ class CommentController extends BaseController
         }
 
 
-        Comment::create([
-            'user_id' => $request->user_id,
+        $comment = Comment::create([
+            'user_id' => auth()->user()->id,
             'client_id' => $request->client_id,
             'comment' => $request->comment,
         ]);
+        
+        $comment->created_by = auth()->user()->name;
 
-        return $this->sendResponse(trans('messages.success'));
+        return $this->sendResponse($comment);
 
         
     }
