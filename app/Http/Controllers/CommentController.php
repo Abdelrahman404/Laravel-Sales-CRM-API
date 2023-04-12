@@ -36,8 +36,6 @@ class CommentController extends BaseController
             'comment' => $request->comment,
         ]);
         
-        $comment->created_by = auth()->user()->name;
-
         return $this->sendResponse($comment);
 
         

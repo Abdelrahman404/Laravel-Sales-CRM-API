@@ -9,6 +9,7 @@ use App\Models\Status;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Validator;
 
 class ReportController extends BaseController
 {
@@ -16,7 +17,7 @@ class ReportController extends BaseController
 
         $data = [];
 
-        $client = Client::with('case','country', 'city', 'area')
+        $client = Client::with('case','country', 'city', 'area','products')
                         ->withCount('calls')
                         ->findOrFail($request->client_id);
 
@@ -26,6 +27,16 @@ class ReportController extends BaseController
     }
 
     public function sellerReport(Request $request){
+
+        $validator =  Validator::make($request->all(), [
+            'seller_id' => 'required|exists:users,id',
+            'duration' => 'required|integer|between:1,7'
+        ]);
+
+        if ($validator->fails()){
+
+            return $this->sendError($validator->errors());
+        }
 
         $user = User::findOrFail($request->seller_id)->makeVisible(['name_en', 'name_ar']);
 

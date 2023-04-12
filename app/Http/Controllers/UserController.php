@@ -57,7 +57,7 @@ class UserController extends BaseController
      
         $data = $request->only(['name_en', 'name_ar', 'password', 'type', 'details', 'email']);
 
-        if($request->exists('image')){
+        if($request->exists('image') && $request->image != null){
             $file = $this->uploadBase64Image($request->image,'images');
             $fileName = $file['url'];
         }else{
