@@ -12,7 +12,7 @@ class DealController extends BaseController
     public function store(Request $request){
 
         $validator =  Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
+          
             'client_id' => 'required|exists:clients,id',
             'product_id' => 'required|exists:products,id',
             'amount' => 'required|string',
@@ -27,7 +27,7 @@ class DealController extends BaseController
         $country_id = $client->country->id;
 
         Deal::create([
-            'user_id' => $request->user_id,
+            'user_id' => auth()->user()->id,
             'client_id' => $request->client_id,
             'product_id' => $request->product_id,
             'amount' => $request->amount,
