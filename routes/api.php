@@ -75,6 +75,7 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::get('/client/{id}', [ClientController::Class, 'show']);
         route::post('/client/toggleActive/{id}', [ClientController::Class, 'toggleActive']);
         route::post('/client/update_status/', [ClientController::class, 'updateStatus']);
+        route::get('/clients/new/',[ClientController::class, 'newClients']);
     
         // Follow-UP Routesfollow-up
         route::get('/follow-up', [FollowUpController::Class, 'index']);

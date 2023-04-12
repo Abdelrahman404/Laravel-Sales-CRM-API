@@ -39,8 +39,14 @@ class ClientController extends BaseController
                         ->with('country', 'city', 'area')
                         ->latest()
                         ->paginate($this->rows);
- 
-        return $this->sendResponse($clients);
+
+        $data = [];
+
+        $data['clients'] = $clients;
+
+        $data['total'] = Client::count();
+
+        return $this->sendResponse($data);
     }
 
     /**
@@ -253,5 +259,12 @@ class ClientController extends BaseController
         ]);
 
         return $this->sendResponse(trans('messages.success'));
+    }
+
+    public function newClients(){
+
+        $clients = Client::where('status', 0)->get();
+
+        return $this->sendResponse($clients);
     }
 }
