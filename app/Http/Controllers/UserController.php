@@ -126,6 +126,7 @@ class UserController extends BaseController
      */
     public function update(UpdateUserRequest $request)
     {
+
        $data = $request->only(['id', 'name_en', 'name_ar', 'password', 'type', 'details', 'email']);
 
        if($request->exists('image') && $request->image != null ){
@@ -135,6 +136,7 @@ class UserController extends BaseController
             $fileName = User::find($data['id'])->image;
         }
         
+
         $user = User::where('id', $data['id'])->update([
                 'email' => $data['email'],
                 'name_en'=> $data['name_en'],
@@ -149,12 +151,16 @@ class UserController extends BaseController
 
             foreach($data['details'] as $detail)
 
-            $info = UserInfo::where('id', $detail['id'])->update([
-                'user_id' => $data['id'],
-                'country_id' => $detail['country_id'],
-                'comission' => $detail['comission'],
-                'target' => $detail['target'],
-         ]);
+            $info =  UserInfo::updateOrCreate(
+                [
+                    'user_id' => $data['id'],
+                ],
+                [
+                    'country_id' => $detail['country_id'],
+                    'comission' => $detail['comission'],
+                    'target' => $detail['target'],
+                ],
+            );
        }
         
       
