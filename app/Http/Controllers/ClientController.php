@@ -39,8 +39,14 @@ class ClientController extends BaseController
                         ->with('country', 'city', 'area')
                         ->latest()
                         ->paginate($this->rows);
- 
-        return $this->sendResponse($clients);
+
+        $data = [];
+
+        $data['clients'] = $clients;
+
+        $data['total'] = Client::count();
+
+        return $this->sendResponse($data);
     }
 
     /**
@@ -108,8 +114,11 @@ class ClientController extends BaseController
         
         $calls = Call::where('client_id', $request->id)->get();
 
+        $products = Product::all();
+
         $data['client'] = $client;
         $data['calls'] = $calls; 
+        $data['products'] = $products;
         $data['cases_count'] = $this->casesCount();
 
         return $this->sendResponse($data);
@@ -253,5 +262,34 @@ class ClientController extends BaseController
         ]);
 
         return $this->sendResponse(trans('messages.success'));
+    }
+
+    public function newClients(){
+
+        $clients = Client::where('status', 0)->get();
+
+        $cases = Status::all();
+
+        $casesCollection = collect();
+
+        foreach($cases as $case){
+            
+            $count = Client::where('status', $case->id)->count();
+
+            $casesCollection->push(collect(['id' => $case->id, 'name' => $case->name, 'count' => $count] ));
+            
+        }
+
+        $data['cases'] = $casesCollection;
+        
+        $data['clients'] = $clients;
+
+        return $this->sendResponse($data);
+
+
+
+        
+
+        
     }
 }

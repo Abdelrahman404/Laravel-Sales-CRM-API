@@ -20,6 +20,46 @@ class BaseController extends Controller
     const MAX_SIZE		= 1024 * 1024 * 1024;
     const UPLOAD_PATH	= '/public/upload';
 
+    public function uploadBase64File($file , $folder , $width = null , $height = null, $attachment_name = null){
+
+		if( !preg_match("/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).base64,.*/", $file) ){
+	        return array('check' => false , 'msg' => "File base64 incorrect");
+		}
+
+		$fileBase64        	= substr($file, strpos($file, ",")+1) ;
+	    $image              = base64_decode( $fileBase64 );
+	    $extension          = explode('/', mime_content_type($file))[1];
+	    if(in_array($extension, self::EXCEL)){
+	    	$extension = "xlsx";
+	    }
+
+        // For Attachment Name
+	    if (isset($attachment_name) && !is_null($attachment_name)){
+            // $safeName = $attachment_name.'.'.$extension;
+            $safeName = Str::uuid().'.'.$extension;
+        }else{
+            $safeName = Str::uuid().'.'.$extension;
+        }
+
+	    Storage::disk('temp')->put($safeName, $image );
+
+	    if(!in_array($extension, self::ALLOW_EXT)){
+	    	Storage::disk('temp')->delete($safeName);
+	        return array('check' => false , 'msg' => "Unknown File Type ".$extension );
+	    }
+
+	    if( File::size(Storage::disk('temp')->path($safeName))  > self::MAX_SIZE ){
+	    	Storage::disk('temp')->delete($safeName);
+	        return array( 'check' => false , 'msg' => 'Max file size is '.self::MAX_SIZE.' MB');
+	    }
+
+		Storage::put($folder.'/'.$safeName, Storage::disk('temp')->get($safeName) );
+		Storage::disk('temp')->delete($safeName);
+
+		return array( 'check' => true , 'url' => Storage::url($folder.'/'.$safeName) , 'ext' =>$extension, 'filename' => $attachment_name, 'extension' => $extension );
+
+	}
+    
   	public function uploadBase64Image($file, $folder, $width = null, $height = null, $attachment_name = null)
     {
 		if( !preg_match("/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).base64,.*/", $file)){

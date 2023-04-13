@@ -14,6 +14,7 @@ use App\Http\Controllers\FollowUpController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DealController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +75,7 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::get('/client/{id}', [ClientController::Class, 'show']);
         route::post('/client/toggleActive/{id}', [ClientController::Class, 'toggleActive']);
         route::post('/client/update_status/', [ClientController::class, 'updateStatus']);
+        route::get('/clients/new/',[ClientController::class, 'newClients']);
     
         // Follow-UP Routesfollow-up
         route::get('/follow-up', [FollowUpController::Class, 'index']);
@@ -93,6 +95,8 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::get('/reports/client', [ReportController::class, 'clientReport']);
         route::get('/reports/seller', [ReportController::class, 'sellerReport']);
 
+        // Products Routes
+        route::get('/products',[ProductController::class, 'index']);
 
 
 

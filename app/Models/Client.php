@@ -56,4 +56,9 @@ class Client extends Model
         return $this->belongsToMany(Product::class, 'clients_products', 'client_id', 'product_id');
     }
     
+    protected function serializeDate($date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+    
 }
