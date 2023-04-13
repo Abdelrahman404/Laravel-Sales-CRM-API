@@ -68,7 +68,7 @@ class UserController extends BaseController
                 'name_en'=> $data['name_en'],
                 'name_ar'=> $data['name_ar'],
                 'image' => $fileName,
-                'password' => $data['password'],
+                'password' => bcrypt($data['password']),
                 'type' => $data['type'],
         ]);
 
@@ -140,7 +140,7 @@ class UserController extends BaseController
                 'name_en'=> $data['name_en'],
                 'name_ar'=> $data['name_ar'],
                 'image' => $fileName,
-                'password' => $data['password'],
+                'password' => bcrypt($data['password']),
                 'type' => $data['type'],
         ]);
 
