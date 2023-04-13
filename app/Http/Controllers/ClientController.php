@@ -116,10 +116,13 @@ class ClientController extends BaseController
 
         $products = Product::all();
 
+        $countries = Country::all();
+
         $data['client'] = $client;
         $data['calls'] = $calls; 
         $data['products'] = $products;
         $data['cases_count'] = $this->casesCount();
+        $data['countries'] = $countries;
 
         return $this->sendResponse($data);
     }
@@ -174,13 +177,16 @@ class ClientController extends BaseController
             'country_id' => $request->country_id,
             'city_id' => $request->city_id,
             'area_id' => $request->area_id,
-            'products_interest' => json_encode($request->products_interest),
             'company_level' => $request->company_level,
             'company_size' => $request->company_size,
             'status' => $request->status,
             'note' => $request->note,
             'created_by' => auth()->user()->name
         ]);
+
+        $client = Client::find($request->id);
+
+        $client->products()->sync($request->product_interest);
 
         return $this->sendResponse('success', trans('messages.updated_successfully'));
     }

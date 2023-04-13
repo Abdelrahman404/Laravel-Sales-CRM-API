@@ -14,9 +14,13 @@ class DealController extends BaseController
         $validator =  Validator::make($request->all(), [
           
             'client_id' => 'required|exists:clients,id',
-            'product_id' => 'required|exists:products,id',
-            'amount' => 'required|string',
+            'products' => 'required|array|min:1',
+            'products.*' => 'required|integer|exists:products,id',
+            'amount' => 'required|between:0,999.999',
+            
+
         ]);
+
         if ($validator->fails()){
 
             return $this->sendError($validator->errors());
@@ -26,13 +30,14 @@ class DealController extends BaseController
         $client = Client::find($request->client_id);
         $country_id = $client->country->id;
 
-        Deal::create([
+        $deal = Deal::create([
             'user_id' => auth()->user()->id,
             'client_id' => $request->client_id,
-            'product_id' => $request->product_id,
             'amount' => $request->amount,
             'country_id' => $country_id
         ]);
+
+        $deal->products()->attach($request->products);
 
         return $this->sendResponse(trans('messages.success'));
     }
