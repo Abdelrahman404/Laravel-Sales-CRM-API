@@ -186,7 +186,8 @@ class ClientController extends BaseController
 
         $client = Client::find($request->id);
 
-        $client->products()->sync($request->product_interest);
+        $client->products()->sync($request->products_interest);
+
 
         return $this->sendResponse('success', trans('messages.updated_successfully'));
     }

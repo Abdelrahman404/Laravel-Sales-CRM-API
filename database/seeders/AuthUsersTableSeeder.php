@@ -16,6 +16,7 @@ class AuthUsersTableSeeder extends Seeder
     public function run()
     {
         $admin = User::create([
+                'username' => 'admin',
                 'name_en' => 'admin-cloud-secret',
                 'name_ar' => 'مدير شركه اسرار السحابة',
                 'password' => bcrypt('123456'),
@@ -24,6 +25,7 @@ class AuthUsersTableSeeder extends Seeder
         ]);
 
        $seller = User::create([
+            'username' => 'sales',
             'name_en' => 'sales-cloud-secret',
             'name_ar' => 'بائع شركة أسرار السحابة',
             'password' => bcrypt('123456'),
@@ -31,12 +33,12 @@ class AuthUsersTableSeeder extends Seeder
             'type' => 'seller'
     ]);
 
-    UserInfo::create([
-        'user_id' => $seller->id,
-        'country_id' => 1,
-        'target' => '5000',
-        'comission' => '20'
-    ]);
+        UserInfo::create([
+            'user_id' => $seller->id,
+            'country_id' => 1,
+            'target' => '5000',
+            'comission' => '20'
+        ]);
 
 
     }

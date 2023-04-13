@@ -19,14 +19,14 @@ class AuthController extends BaseController
     {
       
         $validator =  Validator::make($request->all(), [
-            'email' => 'required|string|email',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
         if ($validator->fails()){
 
             return $this->sendError($validator->errors());
         }
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('username', 'password');
 
         $token = Auth::attempt($credentials);
         
@@ -71,7 +71,7 @@ class AuthController extends BaseController
     public function logout()
     {
         Auth::logout();
-        return sendResponse('success');
+        return sendResponse(trans('messages.success'));
     }
 
     public function refresh()

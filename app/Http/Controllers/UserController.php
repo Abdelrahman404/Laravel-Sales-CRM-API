@@ -58,7 +58,7 @@ class UserController extends BaseController
         $data = $request->only(['name_en', 'name_ar', 'password', 'type', 'details', 'email']);
 
         if($request->exists('image') && $request->image != null){
-            $file = $this->uploadBase64File($request->image,'images');
+            $file = $this->uploadBase64File($request->image,'public/images');
             $fileName = $file['url'];
         }else{
             $fileName = '/storage/images/avatar.png';
@@ -130,7 +130,7 @@ class UserController extends BaseController
        $data = $request->only(['id', 'name_en', 'name_ar', 'password', 'type', 'details', 'email']);
 
        if($request->exists('image') && $request->image != null ){
-            $file = $this->uploadBase64File($request->image,'images');
+            $file = $this->uploadBase64File($request->image,'public/images');
             $fileName = $file['url'];
         }else{
             $fileName = User::find($data['id'])->image;
@@ -149,22 +149,33 @@ class UserController extends BaseController
         // If user is not admin (seller)
         if($request->exists('details')){
 
-            foreach($data['details'] as $detail)
+            foreach($data['details'] as $detail){
 
-            $info =  UserInfo::updateOrCreate(
-                [
-                    'user_id' => $data['id'],
-                ],
-                [
-                    'country_id' => $detail['country_id'],
-                    'comission' => $detail['comission'],
-                    'target' => $detail['target'],
-                ],
-            );
+                if(array_key_exists("id", $detail)){
+                    
+                    UserInfo::where('id', $detail['id'])->update([
+                        'country_id' => $detail['country_id'],
+                        'comission' => $detail['comission'],
+                        'target' => $detail['target'],
+                    ]);
+            }else{
+
+                    UserInfo::create([
+                        'user_id' => $data['id'],
+                        'country_id' => $detail['country_id'],
+                        'comission' => $detail['comission'],
+                        'target' => $detail['target'],
+                    ]);
+
+            }
+
        }
+
+    }
         
       
-                
+        return $user = User::with('UserInfo')->find($data['id']);
+
         return $this->sendResponse($user, trans('messages.updated_successfully'));
     }
 
