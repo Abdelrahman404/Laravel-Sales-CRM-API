@@ -233,10 +233,10 @@ class UserController extends BaseController
 
         $user->api_token = substr($request->header('authorization'), 7);
 
-        $user->total_clients = Client::where('status', '!=', 0)->count();
+        $user->total_clients = Client::count();
 
-        $user->total_followup = Client::count();
-        
+        $user->total_followup =  Client::where('status', '!=', 0)->count();
+
        return $this->sendResponse($user);
     }
 
