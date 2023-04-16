@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserInfo;
@@ -232,7 +233,10 @@ class UserController extends BaseController
 
         $user->api_token = substr($request->header('authorization'), 7);
 
+        $user->total_clients = Client::where('status', '!=', 0)->count();
 
+        $user->total_followup = Client::count();
+        
        return $this->sendResponse($user);
     }
 
