@@ -24,7 +24,7 @@ class CountryCityAreaTablesSeeder extends Seeder
         $countries = json_decode($json, true);
 
           foreach ($countries as $country) {
-            City::query()->updateOrCreate([
+            Country::query()->updateOrCreate([
                 'id' => $country['id'],
                 'name_ar' => $country['name_ar'],
                 'name_en' => $country['name_en'],
