@@ -35,6 +35,7 @@ class CountryCityAreaTablesSeeder extends Seeder
         $cities = json_decode($json, true);
         foreach ($cities as $city) {
             City::query()->updateOrCreate([
+                'id' => $city['id'],
                 'country_id' => $city['country_id'],
                 'name_ar' => $city['name_ar'],
                 'name_en' => $city['name_en'],
@@ -44,6 +45,7 @@ class CountryCityAreaTablesSeeder extends Seeder
          $areas = json_decode($json, true);
          foreach ($areas as $area) {
             Area::query()->updateOrCreate([
+                'id' => $area['id'],
                 'city_id' => $area['state_id'],
                 'name_ar' => $area['name_ar'],
                 'name_en' => $area['name_en'],
