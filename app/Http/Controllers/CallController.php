@@ -22,9 +22,9 @@ class CallController extends BaseController
 
         $validator =  Validator::make($request->all(), [
             'date' => 'required|date',
-            'duration' => 'required|integer',
+            'hour' => 'required|integer',
             'possibility_reply_id' => 'required',
-            'hour' => [
+            'duration' => [
                 Rule::requiredIf(function() use ($request){
                     return in_array($request->possibility_reply_id, [1, 5]);
                 })
