@@ -22,16 +22,15 @@ class UserController extends BaseController
      */
     public function index(Request $request)
     {
-        if(isset($request->rows)){ $this->rows = $request->rows;}
+    // Update values based on request
+    if ($request->filled('rows')) { $this->rows = $request->input('rows');}
+    if ($request->filled('active')) {$this->active = $request->input('active');}
+    if ($request->filled('word')) {$this->word = $request->input('word');}
 
-        if(isset($request->active)){ $this->active = $request->active;}
-  
-        if(isset($request->word)){ $this->word = $request->word;}
-
-        $users = User::where('name_'.app()->getLocale(),'like',"%{$this->word}%")
-                ->where('status',$this->active )->latest()->paginate($this->rows);
-        
-        $users->makeVisible(['name_en', 'name_ar']);
+    $users = User::where('name_'.app()->getLocale(),'like',"%{$this->word}%")
+            ->where('status',$this->active )->latest()->paginate($this->rows);
+    
+    $users->makeVisible(['name_en', 'name_ar']);
 
         return $this->sendResponse($users , trans('messages.success'));
     }
@@ -57,10 +56,10 @@ class UserController extends BaseController
      
         $data = $request->only(['name_en', 'name_ar', 'password', 'type', 'details', 'email']);
 
-        if($request->exists('image') && $request->image != null){
-            $file = $this->uploadBase64File($request->image,'public/images');
+        if ($request->filled('image')) {
+            $file = $this->uploadBase64File($request->image, 'public/images');
             $fileName = $file['url'];
-        }else{
+        } else {
             $fileName = '/storage/images/avatar.png';
         }
         $user = User::create([

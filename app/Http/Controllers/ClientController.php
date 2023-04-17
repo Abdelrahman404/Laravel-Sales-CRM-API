@@ -28,11 +28,10 @@ class ClientController extends BaseController
     public function index(Request $request)
     { 
   
-      if(isset($request->rows)){ $this->rows = $request->rows;}
-
-      if(isset($request->active)){ $this->active = $request->active;}
-
-      if(isset($request->word)){ $this->word = $request->word;}
+    // Update values based on request
+    if ($request->filled('rows')) { $this->rows = $request->input('rows');}
+    if ($request->filled('active')) {$this->active = $request->input('active');}
+    if ($request->filled('word')) {$this->word = $request->input('word');}
 
         $clients = Client::where('name','like',"%{$this->word}%")
                         ->where('active', $this->active)
@@ -200,27 +199,24 @@ class ClientController extends BaseController
      */
     public function toggleActive(Request $request)
     {
-        $user  = Client::findOrFail($request->id);
+        $user = Client::findOrFail($request->id);
+
+        $user->active = !$user->active;
         
-        if ($user->active == 0) {
-            $user->active = 1;
-        } else if ($user->active == 1) {
-            $user->active = 0;
-        }
-
         $user->save();
-
+        
         return $this->sendResponse('success', trans('messages.success'));
+        
     }
 
     public function deletedClients(){
 
         $data = [];
 
-        $clients = Client::where('active', false)
-                ->with('country', 'city', 'area')
-                ->paginate(15);
-        
+        $clients = Client::whereActive(false)
+                        ->with('country', 'city', 'area')
+                        ->paginate(15);
+    
         $data['clients'] = $clients;
 
         return $this->sendResponse($data);
@@ -293,10 +289,5 @@ class ClientController extends BaseController
 
         return $this->sendResponse($data);
 
-
-
-        
-
-        
     }
 }

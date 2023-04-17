@@ -17,11 +17,10 @@ class FollowUpController extends BaseController
 
     public function index(Request $request){
         
-        if(isset($request->rows)){ $this->rows = $request->rows;}
-
-        if(isset($request->status)){ $this->status = $request->status;}
-  
-        if(isset($request->word)){ $this->word = $request->word;}
+    // Update values based on request
+    if ($request->filled('rows')) { $this->rows = $request->input('rows');}
+    if ($request->filled('active')) {$this->status = $request->input('active');}
+    if ($request->filled('word')) {$this->word = $request->input('word');}
 
         $clients = Client::where('name','like',"%{$this->word}%")
                         ->where('active', true)
@@ -35,8 +34,6 @@ class FollowUpController extends BaseController
         $cases = Status::all();
 
         $casesCollection = collect();
-
-     
 
         foreach($cases as $case){
             

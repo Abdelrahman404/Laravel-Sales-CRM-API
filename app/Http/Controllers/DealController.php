@@ -18,7 +18,6 @@ class DealController extends BaseController
             'products.*' => 'required|integer|exists:products,id',
             'amount' => 'required|between:0,999.999',
             
-
         ]);
 
         if ($validator->fails()){
