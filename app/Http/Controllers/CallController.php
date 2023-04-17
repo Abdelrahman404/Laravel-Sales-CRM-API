@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Call;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Validator;
 
 class CallController extends BaseController
@@ -22,8 +23,12 @@ class CallController extends BaseController
         $validator =  Validator::make($request->all(), [
             'date' => 'required|date',
             'hour' => 'required|string',
-            'duration' => 'required|integer',
             'possibility_reply_id' => 'required',
+            'duration' => [
+                Rule::requiredIf(function() use ($request){
+                    return in_array($request->possibility_reply_id, [1, 5]);
+                })
+            ],
             'client_id' => 'required|exists:clients,id'
         ]);
 
