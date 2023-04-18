@@ -174,7 +174,7 @@ class UserController extends BaseController
     }
         
       
-        return $user = User::with('UserInfo')->find($data['id']);
+        $user = User::with('UserInfo')->find($data['id']);
 
         return $this->sendResponse($user, trans('messages.updated_successfully'));
     }
