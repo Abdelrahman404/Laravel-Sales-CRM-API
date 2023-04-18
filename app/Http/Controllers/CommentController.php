@@ -12,7 +12,7 @@ class CommentController extends BaseController
 
         $data = [];
 
-        $comments = Comment::with('user')->where('client_id', $request->client_id)->get();
+        $comments = Comment::with('user')->where('client_id', $request->client_id)->latest()->get();
 
         return $this->sendResponse($comments);
 
