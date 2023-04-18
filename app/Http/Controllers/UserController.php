@@ -55,7 +55,7 @@ class UserController extends BaseController
     public function store(CreateUserRequest $request)
     {
      
-        $data = $request->only(['name_en', 'name_ar', 'password', 'type', 'details', 'email']);
+        $data = $request->only(['name_en', 'name_ar', 'password', 'type', 'details']);
 
         if ($request->filled('image')) {
             $file = $this->uploadBase64File($request->image, 'public/images');
@@ -64,7 +64,6 @@ class UserController extends BaseController
             $fileName = '/storage/images/avatar.png';
         }
         $user = User::create([
-                'email' => $data['email'],
                 'name_en'=> $data['name_en'],
                 'name_ar'=> $data['name_ar'],
                 'image' => $fileName,
