@@ -36,7 +36,7 @@ class CommentController extends BaseController
             'comment' => $request->comment,
         ]);
         
-        return $this->sendResponse($comment);
+        return $this->sendResponse($comment, trans('messages.success'));
 
         
     }

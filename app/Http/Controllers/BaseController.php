@@ -98,8 +98,7 @@ class BaseController extends Controller
 
     function sendResponse($result, $message = 'success')
     {
-		$message = trans('messages.success');
-
+	
     	$response = [
             'check' => true,
             'data'  => $result,
