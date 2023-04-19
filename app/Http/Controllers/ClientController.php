@@ -43,7 +43,7 @@ class ClientController extends BaseController
 
         $data['clients'] = $clients;
 
-        $data['total'] = Client::count();
+        $data['total'] = Client::whereActive(true)->count();
 
         return $this->sendResponse($data);
     }
