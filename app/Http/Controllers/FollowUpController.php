@@ -25,7 +25,7 @@ class FollowUpController extends BaseController
     
         $clients = Client::where('active', true)
                         ->where('status', $this->status)
-                        ->orWhere('name','like',"%{$this->word}%")
+                        ->where('name','like',"%{$this->word}%")
                         ->with(['country', 'city', 'area', 'calls'])
                         ->withCount('calls')
                         ->withSum('deals', 'amount')
