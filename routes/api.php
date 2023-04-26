@@ -83,6 +83,7 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
     
         // Follow-UP Routesfollow-up
         route::get('/follow-up', [FollowUpController::Class, 'index']);
+        route::get('/follow-up/filter', [FollowUpController::class, 'filter']);
 
         // Calls Routes
         route::get('/calls', [CallController::class, 'getClientCalls']);
@@ -104,14 +105,6 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
 
         // Posssibility of reply routes
         route::get('/call_response_types', [PossibilityOfReplyController::class, 'index']);
-
-
-
-
-
-
-   
-
 
         
 });

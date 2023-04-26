@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\PossibilityOfReply;
 use App\Models\Status;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class FollowUpController extends BaseController
@@ -51,5 +53,19 @@ class FollowUpController extends BaseController
 
         return $this->sendResponse($data);
         
+    }
+
+    public function filter(){
+
+        $sellers = User::whereStatus(true)->whereType('seller')->get();
+
+        $callResponseTypes = PossibilityOfReply::all();
+
+        $data['sellers'] = $sellers;
+
+        $data['call_response_types'] = $callResponseTypes;
+
+        return $this->sendResponse($data);
+
     }
 }

@@ -48,5 +48,11 @@ class PossibilityOfReplyTableSeeder extends Seeder
             'name_ar' => 'الرقم خطأ',
             'name_en' => 'Worng number'
         ]);
+
+        PossibilityOfReply::create([
+            'id' => 6 ,
+            'name_ar' => 'يحتاج إلي متابعة',
+            'name_en' => 'Needs follow-up'
+        ]);
     }
 }
