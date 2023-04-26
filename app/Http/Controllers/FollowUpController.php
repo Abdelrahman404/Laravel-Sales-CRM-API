@@ -11,7 +11,7 @@ class FollowUpController extends BaseController
 
     public $rows = 15;
 
-    public $word;
+    public $word = '';
 
     public $status = 1;
 
@@ -21,10 +21,11 @@ class FollowUpController extends BaseController
     if ($request->filled('rows')) { $this->rows = $request->input('rows');}
     if ($request->filled('active')) {$this->status = $request->input('active');}
     if ($request->filled('word')) {$this->word = $request->input('word');}
-
-        $clients = Client::where('name','like',"%{$this->word}%")
-                        ->where('active', true)
+    if ($request->filled('status')) {$this->word = $request->input('status');}
+    
+        $clients = Client::where('active', true)
                         ->where('status', $this->status)
+                        ->orWhere('name','like',"%{$this->word}%")
                         ->with(['country', 'city', 'area', 'calls'])
                         ->withCount('calls')
                         ->withSum('deals', 'amount')
@@ -44,7 +45,7 @@ class FollowUpController extends BaseController
         }
             
         $data = [];
-        $data['total'] = $clients->count();
+        $data['total'] = Client::whereActive(true)->where('status', '!=', 0)->count();
         $data['clients']  = $clients;
         $data['cases_count'] = $casesCollection;
 
