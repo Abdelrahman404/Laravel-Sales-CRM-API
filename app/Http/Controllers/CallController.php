@@ -49,6 +49,8 @@ class CallController extends BaseController
             'possibility_reply_id' => $request->possibility_reply_id,
             'created_by' => auth()->user()->name,
         ]);
+        
+        $call->load('possibilityOfReply');
 
         return $this->sendResponse($call, trans('messages.success'));
         
