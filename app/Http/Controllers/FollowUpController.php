@@ -24,7 +24,7 @@ class FollowUpController extends BaseController
     if ($request->filled('status')) {$this->word = $request->input('status');}
     
         $clients = Client::where('active', true)
-                        ->where('status', $this->status)
+                        ->orWhere('status', $this->status)
                         ->orWhere('name','like',"%{$this->word}%")
                         ->with(['country', 'city', 'area', 'calls'])
                         ->withCount('calls')
