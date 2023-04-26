@@ -290,4 +290,59 @@ class ClientController extends BaseController
         return $this->sendResponse($data);
 
     }
+
+    public function sendWhatsAppMessage(Request $request){
+
+        $validator =  Validator::make($request->all(), [
+            'number' => 'required',
+            'message' => 'required|string'
+        ]);
+
+        if ($validator->fails()){
+
+            return $this->sendError($validator->errors());
+        }
+
+
+        $phone= $request->number;
+        $message = $request->message;
+        $data['message'] = $message;
+        $data['phone'] = $phone;
+
+        $postData = [
+            "messaging_product" => "whatsapp",
+            "recipient_type" => "individual",
+            "to" => $data['phone'],
+            "text" => [
+                "body" => $data['message'],
+                "preview_url" => true
+
+            ]
+        ];
+   
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://graph.facebook.com/v15.0/118751447862561/messages',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => json_encode($postData),
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer EAALBzPfuiIIBAHRbjl0HZAjlUPSHH56jeZA1zs1deDvOo1r4ThwEmiOvvJq8bjksVc1acEnPRsmOTVuThDBLS4f9lcLjyvmmTrhzChjiLz8m1obBuQxIFZAlZAqZA4ZA65w80RHCnhdixbQWBtKBZA6vAP6X1xbxQzgDuXWKO1GTHYcPFq1bcE5GgsaVeKOxjp59w7TY1ZCEnA7yqW0tTS52B5fP2s1GuhEZD',
+            'Content-Type: application/json'
+        ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        echo $response;
+
+        return $this->sendResponse(trans('messages.success'));
+    }
 }

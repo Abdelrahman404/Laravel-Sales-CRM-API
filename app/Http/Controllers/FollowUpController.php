@@ -37,16 +37,14 @@ class FollowUpController extends BaseController
 
         foreach($cases as $case){
             
-            $count = Client::where('status', $case->id)->count();
+            $count = Client::where('status', $case->id)->whereActive(true)->count();
 
             $casesCollection->push(collect(['id' => $case->id, 'name' => $case->name, 'count' => $count] ));
             
         }
-        
-        $total = Client::where('status', '!=', 0)->count();
-        
+            
         $data = [];
-        $data['total'] = $total;
+        $data['total'] = $clients->count();
         $data['clients']  = $clients;
         $data['cases_count'] = $casesCollection;
 
