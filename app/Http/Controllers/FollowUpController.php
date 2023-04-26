@@ -16,11 +16,11 @@ class FollowUpController extends BaseController
     public $status = 1;
 
     public function index(Request $request){
-        
+    
     // Update values based on request
     if ($request->filled('rows')) { $this->rows = $request->input('rows');}
     if ($request->filled('word')) {$this->word = $request->input('word');}
-    if ($request->filled('status')) {$this->word = $request->input('status');}
+    if ($request->filled('status')) {$this->status = $request->input('status');}
     
         $clients = Client::where('active', true)
                         ->where('status', $this->status)
