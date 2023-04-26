@@ -44,6 +44,8 @@ class ClientController extends BaseController
         $data['clients'] = $clients;
 
         $data['total'] = Client::whereActive(true)->count();
+        
+        $data['total_followup'] = Client::whereActive(true)->where('status', '!=', 0)->count(); 
 
         return $this->sendResponse($data);
     }
