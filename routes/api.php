@@ -15,6 +15,8 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DealController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PossibilityOfReplyController;
+use App\Models\PossibilityOfReply;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,6 +101,11 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
 
         // Products Routes
         route::get('/products',[ProductController::class, 'index']);
+
+        // Posssibility of reply routes
+        route::get('/call_response_types', [PossibilityOfReplyController::class, 'index']);
+
+
 
 
 

@@ -11,7 +11,7 @@ class CallController extends BaseController
 {
     public function getClientCalls(Request $request){
 
-            $calls = Call::where('client_id',$request->client_id)->latest()->get();
+            $calls = Call::with('possibilityOfReply')->where('client_id',$request->client_id)->latest()->get();
             
             $data['calls'] = $calls;
 

@@ -11,9 +11,18 @@ class PossibilityOfReply extends Model
 
     protected $guarded = [];
 
+    protected $hidden = ['name_en', 'name_ar', 'created_at', 'updated_at'];
+
+    protected $appends = ['name'];
+
+    public function getNameAttribute()
+    {
+        return $this->{'name_'.app()->getLocale()};
+    }
+
     public function calls(){
 
-        return $this->hasMany(Call::class);
+        return $this->hasMany(Call::class, 'possibility_reply_id');
     }
 
 

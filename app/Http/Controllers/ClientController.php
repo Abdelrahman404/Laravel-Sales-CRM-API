@@ -44,7 +44,7 @@ class ClientController extends BaseController
         $data['clients'] = $clients;
 
         $data['total'] = Client::whereActive(true)->count();
-        
+
         $data['total_followup'] = Client::whereActive(true)->where('status', '!=', 0)->count(); 
 
         return $this->sendResponse($data);
@@ -113,7 +113,7 @@ class ClientController extends BaseController
 
         $client = Client::with('country', 'city', 'area', 'products','calls', 'comments', 'products')->findOrFail($request->id);
         
-        $calls = Call::where('client_id', $request->id)->get();
+        $calls = Call::with('possibilityOfReply')->where('client_id', $request->id)->get();
 
         $products = Product::all();
 

@@ -23,7 +23,7 @@ class Call extends Model
 
     public function possibilityOfReply(){
 
-        return $this->belongsTo(PossibilityOfReply::class);
+        return $this->belongsTo(PossibilityOfReply::class, 'possibility_reply_id');
     }
   
     public function client(){
