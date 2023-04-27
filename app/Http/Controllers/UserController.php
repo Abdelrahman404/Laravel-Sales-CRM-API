@@ -55,7 +55,7 @@ class UserController extends BaseController
     public function store(CreateUserRequest $request)
     {
      
-        $data = $request->only(['name_en', 'name_ar', 'password', 'type', 'details']);
+        $data = $request->only(['name_en', 'name_ar', 'password', 'type', 'details', 'username']);
 
         if ($request->filled('image')) {
             $file = $this->uploadBase64File($request->image, 'public/images');
@@ -64,6 +64,7 @@ class UserController extends BaseController
             $fileName = '/storage/images/avatar.png';
         }
         $user = User::create([
+                'username' => $data['username'],
                 'name_en'=> $data['name_en'],
                 'name_ar'=> $data['name_ar'],
                 'image' => $fileName,
@@ -126,7 +127,7 @@ class UserController extends BaseController
     public function update(UpdateUserRequest $request)
     {
 
-       $data = $request->only(['id', 'name_en', 'name_ar', 'password', 'type', 'details', 'email']);
+       $data = $request->only(['id', 'name_en', 'name_ar', 'password', 'type', 'details']);
 
        if($request->exists('image') && $request->image != null ){
             $file = $this->uploadBase64File($request->image,'public/images');
@@ -137,7 +138,6 @@ class UserController extends BaseController
         
 
         $user = User::where('id', $data['id'])->update([
-                'email' => $data['email'],
                 'name_en'=> $data['name_en'],
                 'name_ar'=> $data['name_ar'],
                 'image' => $fileName,
