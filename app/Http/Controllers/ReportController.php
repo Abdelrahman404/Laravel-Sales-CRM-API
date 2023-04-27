@@ -131,7 +131,6 @@ class ReportController extends BaseController
 
     public function sellerRegisteredClient(Request $request){
 
-        return 'de7k';
         $seller = User::findOrFail($request->seller_id);
 
         $clients = Client::whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)])
