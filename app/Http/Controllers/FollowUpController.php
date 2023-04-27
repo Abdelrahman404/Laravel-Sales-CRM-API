@@ -51,6 +51,11 @@ class FollowUpController extends BaseController
 
         $clients = ($request->from && $request->to) ? $clients->whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)]) : $clients;
     
+        // Get clients which thier last call status matches given request status
+        $clients = $request->call_response_type_id ? $clients->whereHas('calls', function($query) use ($request){
+            $query->latest()->take(1)->where('possibility_reply_id', $request->call_response_type_id);
+        }) : $clients;
+        
         // Filter by seller and result will by clients added by this seller
        if($request->filled('seller_id')){
 
