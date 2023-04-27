@@ -131,6 +131,7 @@ class ReportController extends BaseController
 
     public function sellerRegisteredClient(Request $request){
 
+        return 'de7k';
         $seller = User::findOrFail($request->seller_id);
 
         $clients = Client::whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)])
@@ -163,7 +164,7 @@ class ReportController extends BaseController
 
             // Check if client has calls before already
             if ($client->calls->count() > 0){
-                
+
                 $client['last_call_status'] = $client->calls->last()->possibilityOfReply->name;
     
             }else{
