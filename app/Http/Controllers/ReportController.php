@@ -128,6 +128,26 @@ class ReportController extends BaseController
         return $output;
 
     }
+
+    public function sellerRegisteredClient(Request $request){
+
+        $seller = User::findOrFail($request->seller_id);
+
+        $clients = Client::where('created_by','like',"%{$seller->name_ar}%")->orWhere('created_by','like',"%{$seller->name_en}%")
+                        ->whereActive(true)
+                        ->with('country', 'city', 'area')
+                        ->latest()
+                        ->get();
+
+        return $this->sendResponse($clients);
+        
+    }
+
+    public function sellerRegisteredCalls($id){
+
+
+    }
+
     public function oldSellerReport(Request $request){
 
         $validator =  Validator::make($request->all(), [
