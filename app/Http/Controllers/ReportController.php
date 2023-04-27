@@ -144,9 +144,20 @@ class ReportController extends BaseController
         
     }
 
-    public function sellerRegisteredCalls($id){
+    public function sellerRegisteredCalls(Request $request){
 
+        $seller = User::findOrFail($request->seller_id);
 
+        $clients = Client::whereHas('calls', function ($query) use ($request, $seller) {
+            $query->whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)])
+                  ->where('created_by','like',"%{$seller->name_ar}%")->orWhere('created_by','like',"%{$seller->name_en}%");
+                  
+        })->whereActive(true)
+        ->with('country', 'city', 'area')
+        ->latest()
+        ->get();
+
+        return $this->sendResponse($clients);
     }
 
     public function oldSellerReport(Request $request){
