@@ -69,8 +69,13 @@ class FollowUpController extends BaseController
         // Adding last call status for each client حالة الرد
         $clients->getCollection()->map(function ($client) {
 
-            $client['last_call_status'] = $client->calls->last()->possibilityOfReply->name;
-
+            // Check if client has calls before already
+            if ($client->calls->count() > 0){
+                $client['last_call_status'] = $client->calls->last()->possibilityOfReply->name;
+            }else{
+                $client['last_call_status'] = null;
+            }
+        
               return $client;
         });
 
