@@ -133,7 +133,8 @@ class ReportController extends BaseController
 
         $seller = User::findOrFail($request->seller_id);
 
-        $clients = Client::where('created_by','like',"%{$seller->name_ar}%")->orWhere('created_by','like',"%{$seller->name_en}%")
+        $clients = Client::whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)])
+                        ->where('created_by','like',"%{$seller->name_ar}%")->orWhere('created_by','like',"%{$seller->name_en}%")
                         ->whereActive(true)
                         ->with('country', 'city', 'area')
                         ->latest()
