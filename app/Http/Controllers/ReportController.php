@@ -40,6 +40,24 @@ class ReportController extends BaseController
 
         $user = User::findOrFail($request->seller_id)->makeVisible(['name_en', 'name_ar']);
 
+
+        
+
+    }
+    public function oldSellerReport(Request $request){
+
+        $validator =  Validator::make($request->all(), [
+            'seller_id' => 'required|exists:users,id',
+            'duration' => 'required|integer|between:1,7'
+        ]);
+
+        if ($validator->fails()){
+
+            return $this->sendError($validator->errors());
+        }
+
+        $user = User::findOrFail($request->seller_id)->makeVisible(['name_en', 'name_ar']);
+
         $durationCases = [ 
                 '1' => 'todayReport',
                 '2' => 'lastWeekReport',
