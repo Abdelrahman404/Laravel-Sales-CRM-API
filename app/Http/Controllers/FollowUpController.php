@@ -123,49 +123,5 @@ class FollowUpController extends BaseController
 
     }
 
-    public function sellerRegisteredClient(Request $request){
-
-        $seller = User::findOrFail($request->seller_id);
-
-        $clients = Client::whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)])
-                        ->where('created_by','like',"%{$seller->name_ar}%")->orWhere('created_by','like',"%{$seller->name_en}%")
-                        ->whereActive(true)
-                        ->with('country', 'city', 'area')
-                        ->latest()
-                        ->get();
-
-        return $this->sendResponse($clients);
-        
-    }
-
-    public function sellerRegisteredCalls(Request $request){
-
-        $seller = User::findOrFail($request->seller_id);
-
-        $clients = Client::whereHas('calls', function ($query) use ($request, $seller) {
-            $query->whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)])
-                  ->where('created_by','like',"%{$seller->name_ar}%")->orWhere('created_by','like',"%{$seller->name_en}%");
-                  
-        })->whereActive(true)
-        ->with('country', 'city', 'area')
-        ->withSum('deals', 'amount')
-        ->latest()
-        ->get();
-
-        // Adding last call status for each client حالة الرد
-        $clients->map(function ($client) {
-
-            // Check if client has calls before already
-            if ($client->calls->count() > 0){
-
-                $client['last_call_status'] = $client->calls->last()->possibilityOfReply->name;
-    
-            }else{
-                $client['last_call_status'] = null;
-            }
-        
-                return $client;
-        });
-        return $this->sendResponse($clients);
-    }
+ 
 }
