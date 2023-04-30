@@ -39,7 +39,7 @@ class FollowUpController extends BaseController
     
         $clients = Client::where('active', true)
                         ->where('status', $this->status)
-                        ->with(['country', 'city', 'area', 'calls'])
+                        ->with(['country', 'city', 'area', 'calls', 'seller'])
                         ->withCount('calls')
                         ->withSum('deals', 'amount');
             
