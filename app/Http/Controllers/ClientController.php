@@ -129,13 +129,16 @@ class ClientController extends BaseController
 
         $wayFoundClients = WayFoundClient::all();
 
+        $sellers = User::whereStatus(true)->where('type', 'seller')->get();
+
         $data['client'] = $client;
         $data['calls'] = $calls; 
         $data['products'] = $products;
         $data['cases_count'] = $this->casesCount();
         $data['countries'] = $countries;
         $data['way_found_clients'] = $wayFoundClients;
-
+        $data['sellers'] = $sellers;
+        
         return $this->sendResponse($data);
     }
 
