@@ -29,6 +29,8 @@ class UpdateClientRequest extends FormRequest
         return [
             'id' => 'required',
             'phone' => 'nullable',
+            'responsible_seller_id' => 'required|exists:users,id',
+            'way_found_client_id' => 'required|exists:way_found_clients,id',
             'date' => 'required',
             'name' => 'required',
             'email' => 'nullable|email',

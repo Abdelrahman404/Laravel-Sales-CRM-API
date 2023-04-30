@@ -21,8 +21,9 @@ class DatabaseSeeder extends Seeder
             AuthUsersTableSeeder::class,
             PossibilityOfReplyTableSeeder::class,
             ProductsTableSeeder::class,
+            WayFoundClientTableSeeder::class,
             CountryCityAreaTablesSeeder::class,
-
+        
     
         ]);
     }

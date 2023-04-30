@@ -96,4 +96,9 @@ class User extends Authenticatable implements JWTSubject
         return $date->format('Y-m-d H:i:s');
     }
 
+    public function client(){
+
+        return $this->hasMany(Client::class, 'responsible_seller_id');
+    }
+
 }

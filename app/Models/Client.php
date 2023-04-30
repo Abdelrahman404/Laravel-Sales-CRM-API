@@ -17,6 +17,14 @@ class Client extends Model
         'products_interest',
 
     ];
+
+    protected $appends = ['responsible_seller'];
+
+    public function getResponsibleSellerAttribute(){
+
+        return $this->seller->name ?? 'null' ;
+    }
+    
     public function country(){
 
         return $this->belongsTo(Country::class, 'country_id');
@@ -60,5 +68,17 @@ class Client extends Model
     {
         return $date->format('Y-m-d H:i:s');
     }
+
+    public function seller(){
+
+        return $this->belongsTo(User::class , 'responsible_seller_id');
+    }
+
+    public function wayFoundClient()
+    {
+        return $this->belongsTo(WayFoundClient::class, 'way_found_client_id');
+    }
+
+
     
 }

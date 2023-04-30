@@ -28,6 +28,8 @@ class CreateClientFormRequest extends FormRequest
         return [
             'date' => 'required',
             'phone' => 'nullable',
+            'responsible_seller_id' => 'required|exists:users,id',
+            'way_found_client_id' => 'required|exists:way_found_clients,id',
             'name' => 'required',
             'email' => 'nullable|email',
             'address' => 'nullable',

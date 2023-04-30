@@ -9,6 +9,8 @@ use App\Models\Client;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Status;
+use App\Models\User;
+use App\Models\WayFoundClient;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -35,7 +37,7 @@ class ClientController extends BaseController
 
         $clients = Client::where('name','like',"%{$this->word}%")
                         ->where('active', $this->active)
-                        ->with('country', 'city', 'area')
+                        ->with('country', 'city', 'area', 'seller', 'wayFoundClient')
                         ->latest()
                         ->paginate($this->rows);
 
@@ -62,6 +64,10 @@ class ClientController extends BaseController
         $data['countries'] = Country::all();
 
         $data['products'] = Product::all();
+        
+        $data['way_found_clients'] = WayFoundClient::all();
+
+        $data['sellers'] = User::whereStatus(true)->where('type', 'seller')->get();
 
         return $this->sendResponse($data);
     }
@@ -83,6 +89,8 @@ class ClientController extends BaseController
             'status' => 0, // brand new client
             'date' => $newformat,
             'phone' => $request->phone,
+            'responsible_seller_id' => $request->responsible_seller_id,
+            'way_found_client_id' => $request->way_found_client_id,
             'name' => $request->name,
             'email' => $request->email,
             'address' => $request->address,
@@ -111,7 +119,7 @@ class ClientController extends BaseController
     {
         $data = [];
 
-        $client = Client::with('country', 'city', 'area', 'products','calls', 'comments', 'products')->findOrFail($request->id);
+        $client = Client::with('country', 'city', 'area', 'products','calls', 'comments', 'products', 'seller', 'wayFoundClient')->findOrFail($request->id);
         
         $calls = Call::with('possibilityOfReply')->where('client_id', $request->id)->get();
 
@@ -119,11 +127,14 @@ class ClientController extends BaseController
 
         $countries = Country::all();
 
+        $wayFoundClients = WayFoundClient::all();
+
         $data['client'] = $client;
         $data['calls'] = $calls; 
         $data['products'] = $products;
         $data['cases_count'] = $this->casesCount();
         $data['countries'] = $countries;
+        $data['way_found_clients'] = $wayFoundClients;
 
         return $this->sendResponse($data);
     }
@@ -171,6 +182,8 @@ class ClientController extends BaseController
         Client::where('id', $request->id)->update([
             'date' => $newformat,
             'phone' => $request->phone,
+            'responsible_seller_id' => $request->responsible_seller_id,
+            'way_found_client_id' => $request->way_found_client_id,
             'name' => $request->name,
             'email' => $request->email,
             'address' => $request->address,
@@ -216,7 +229,7 @@ class ClientController extends BaseController
         $data = [];
 
         $clients = Client::whereActive(false)
-                        ->with('country', 'city', 'area')
+                        ->with('country', 'city', 'area', 'seller', 'wayFoundClient')
                         ->paginate(15);
     
         $data['clients'] = $clients;
