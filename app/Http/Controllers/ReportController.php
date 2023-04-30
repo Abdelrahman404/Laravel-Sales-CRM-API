@@ -54,7 +54,7 @@ class ReportController extends BaseController
 
         $output = [];
         
-        $user->report_duration = $startDate . '-' . $endDate;
+        $user->report_duration = $startDate . ' - ' . trans('messages.to') . ' - ' . $endDate;
 
         $user->makeHidden(['userInfo', 'name_en', 'name_ar', 'type',]);
 
