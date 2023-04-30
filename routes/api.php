@@ -102,8 +102,8 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::get('/reports/seller/registered_clients', [ReportController::class, 'sellerRegisteredClient']);
         route::get('/reports/seller/registered_calls', [ReportController::class, 'sellerRegisteredCalls']);
 
-        route::get('/reports/registered_clients', [ReportController::class, 'sellerRegisteredClient']);
-        route::get('/reports/calls', [ReportController::class, 'sellerRegisteredCalls']);
+        // route::get('/reports/registered_clients', [ReportController::class, 'sellerRegisteredClient']);
+        // route::get('/reports/calls', [ReportController::class, 'sellerRegisteredCalls']);
 
 
         // Products Routes
