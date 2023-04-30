@@ -53,6 +53,7 @@ class FollowUpController extends BaseController
     
         // Get clients which thier last call status matches given request status
         $clients = $request->call_response_type_id ? $clients->whereHas('calls', function($query) use ($request){
+    
             $query->latest()->take(1)->where('possibility_reply_id', $request->call_response_type_id);
         }) : $clients;
         
@@ -71,7 +72,9 @@ class FollowUpController extends BaseController
 
             // Check if client has calls before already
             if ($client->calls->count() > 0){
-                $client['last_call_status'] = $client->calls->last()->possibilityOfReply->name;
+
+                $client['last_call_status'] = $client->calls->sortByDesc('created_at')->first()->possibilityOfReply->name;
+
             }else{
                 $client['last_call_status'] = null;
             }
