@@ -33,5 +33,10 @@ class Comment extends Model
 
         return $this->belongsTo(User::class);
     }
+
+    protected function serializeDate($date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
     
 }
