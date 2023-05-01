@@ -34,9 +34,9 @@ class UpdateUserRequest extends FormRequest
             'password'=> 'required|string',
             'type' => 'required|string',
             'details' => 'nullable|array',
-            'details.*.country_id' => 'nullable|exists:countries,id',
-            'details.*.comission' => 'nullable|string',
-            'details.*.target' => 'nullable|string',
+            'details.*.country_id' => 'required|exists:countries,id',
+            'details.*.comission' => 'required|string',
+            'details.*.target' => 'required|string',
         ];
     }
     
