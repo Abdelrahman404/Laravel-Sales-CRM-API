@@ -15,6 +15,16 @@ class ReportController extends BaseController
 {
     public function clientReport(Request $request){
 
+
+        $validator =  Validator::make($request->all(), [
+            'client_id' => 'required|exists:clients,id',
+        ]);
+
+        if ($validator->fails()){
+
+            return $this->sendError($validator->errors());
+        }
+
         $data = [];
 
         $client = Client::with('case','country', 'city', 'area','products')
@@ -131,6 +141,15 @@ class ReportController extends BaseController
 
     public function sellerRegisteredClient(Request $request){
 
+        $validator =  Validator::make($request->all(), [
+            'seller_id' => 'required|exists:users,id',
+        ]);
+
+        if ($validator->fails()){
+
+            return $this->sendError($validator->errors());
+        }
+        
         $seller = User::findOrFail($request->seller_id);
 
         $clients = Client::whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)])
@@ -151,10 +170,11 @@ class ReportController extends BaseController
         $clients = Client::whereHas('calls', function ($query) use ($request, $seller) {
             $query->whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)])
                   ->where('created_by','like',"%{$seller->name_ar}%")->orWhere('created_by','like',"%{$seller->name_en}%");
-                  
+                    
         })->whereActive(true)
         ->with('country', 'city', 'area')
         ->withSum('deals', 'amount')
+        ->withCount('calls')
         ->latest()
         ->get();
 
