@@ -63,6 +63,7 @@ Route::group(['prefix' => 'v1/{locale}', 'middleware' => ['auth:api', 'language'
         route::post('/user/update/', [UserController::Class, 'update']);
         route::post('/user/toggleActive/{id}', [UserController::Class, 'toggleActive']);
         route::get('/get_my_profile',[UserController::class, 'getMyProfile']);
+        route::delete('/delete_user/{id}', [UserController::class, 'destroy']);
     
 
 

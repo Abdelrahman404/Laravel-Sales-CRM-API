@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserInfo;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Validator;
 
 class UserController extends BaseController
 {
@@ -141,9 +142,13 @@ class UserController extends BaseController
                 'name_en'=> $data['name_en'],
                 'name_ar'=> $data['name_ar'],
                 'image' => $fileName,
-                'password' => bcrypt($data['password']),
                 'type' => $data['type'],
         ]);
+
+        if (isset($data['password'])) {
+            $user->password = bcrypt($data['password']);
+            $user->save();
+        }
 
         // If user is not admin (seller)
         if($request->exists('details')){
@@ -238,5 +243,32 @@ class UserController extends BaseController
        return $this->sendResponse($user);
     }
 
+    public function destroy(Request $request){
+
+        $user = User::find($request->id);
+
+        if (!$user) {
+            
+            return $this->sendError(trans('messages.user_not_exist'));
+        }
+
+        // Check if there are related models then destroy it.
+        if ($user->comments()->count() > 0) {
+            $user->comments()->delete();
+        }
+
+        if ($user->deals()->count() > 0) {
+            $user->deals()->delete();
+        }
+
+        if ($user->userInfo()->count() > 0) {
+            $user->userInfo()->delete();
+        }
+        
+        $user->delete();
+
+        return $this->sendResponse(trans('messages.success'));
+          
+    }
     
 }

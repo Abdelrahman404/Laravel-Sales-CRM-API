@@ -31,7 +31,7 @@ class UpdateUserRequest extends FormRequest
             'image' => 'nullable|string',
             'name_en' => 'required|string|',
             'name_ar' => 'required|string',
-            'password'=> 'required|string',
+            'password'=> 'nullable|string',
             'type' => 'required|string',
             'details' => 'nullable|array',
             'details.*.country_id' => 'required|exists:countries,id',

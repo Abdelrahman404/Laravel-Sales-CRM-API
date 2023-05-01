@@ -11,5 +11,6 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'to' => 'To',
     'permission_denied' => 'Permission denied',
+    'user_not_exist' => 'User not found!',
 
 ];
