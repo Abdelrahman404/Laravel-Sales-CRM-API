@@ -282,6 +282,7 @@ class ClientController extends BaseController
 
     public function updateStatus(Request $request){
 
+        $data = [];
         $validator =  Validator::make($request->all(), [
             'client_id' => 'required|exists:clients,id',
             'status' => 'required|integer|between:1,7'
@@ -296,7 +297,7 @@ class ClientController extends BaseController
             'status' => $request->status
         ]);
 
-        return $this->sendResponse(trans('messages.success'));
+        return $this->sendResponse($data);
     }
 
     public function newClients(){

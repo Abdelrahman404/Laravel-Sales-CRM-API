@@ -100,7 +100,7 @@ class ReportController extends BaseController
         ->withSum('deals', 'amount')
         ->withCount([
             'calls' => function ($query) use ($request){
-                    $query->whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)]);
+                    $query->whereBetween('created_at', [$request->from, $request->to]);
                 }])
         ->latest()
         ->get();
