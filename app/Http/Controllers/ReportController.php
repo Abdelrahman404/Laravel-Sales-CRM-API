@@ -98,7 +98,10 @@ class ReportController extends BaseController
         })->whereActive(true)
         ->with('country', 'city', 'area')
         ->withSum('deals', 'amount')
-        ->withCount('calls')
+        ->withCount([
+            'calls' => function ($query) use ($request){
+                    $query->whereBetween('created_at', [Carbon::parse($request->from), Carbon::parse($request->to)]);
+                }])
         ->latest()
         ->get();
 
