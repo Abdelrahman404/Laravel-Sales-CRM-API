@@ -7,5 +7,6 @@ return [
         'updated_successfully' => 'تم التعديل بنجاح',
         'removed_successfully' => 'تم الحذف بنجاح',
         'success' => 'تم التحديث بنجاح',
-        'to' => 'إلي'
+        'to' => 'إلي',
+        'permission_denied' => 'غير مصرح به',
 ];

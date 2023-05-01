@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Status;
 use App\Models\User;
 use App\Models\WayFoundClient;
+use App\Helpers\AuthorizationHelper;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -178,6 +179,19 @@ class ClientController extends BaseController
      */
     public function update(UpdateClientRequest $request)
     {
+        // Check if user id Admin or he is responsible seller for this client in order to update it 
+        $AuthorizationHelper = new AuthorizationHelper();
+
+        // Check if user is admin 
+        if(!$AuthorizationHelper->userIsAdmin(auth()->user()->id)){
+            // Check is client assigned to user means if this user is responsible seller for this client
+            if (!$AuthorizationHelper->clientAssignedToUser($request->id, auth()->user()->id)){
+                return $this->sendError(trans('messages.permission_denied'));
+            }
+    
+        }
+
+
         $time = strtotime($request->date);
 
         $newformat = date('Y-m-d',$time);
