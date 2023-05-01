@@ -245,6 +245,12 @@ class UserController extends BaseController
 
     public function destroy(Request $request){
 
+        if ($request->id == 1){
+
+            return $this->sendError(trans('messages.user_cannot_be_removed'));
+
+        }
+        
         $user = User::find($request->id);
 
         if (!$user) {

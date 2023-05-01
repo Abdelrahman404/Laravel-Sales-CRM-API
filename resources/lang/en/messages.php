@@ -12,5 +12,6 @@ return [
     'to' => 'To',
     'permission_denied' => 'Permission denied',
     'user_not_exist' => 'User not found!',
+    'user_cannot_be_removed' => 'User cannot be removed!',
 
 ];

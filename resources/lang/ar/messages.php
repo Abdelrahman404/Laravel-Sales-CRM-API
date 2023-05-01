@@ -9,5 +9,6 @@ return [
         'success' => 'تم التحديث بنجاح',
         'to' => 'إلي',
         'permission_denied' => 'غير مصرح به',
-        'user_not_exist' => 'المستخدم غير موجود'
+        'user_not_exist' => 'المستخدم غير موجود',
+        'user_cannot_be_removed' => 'لا يمكن مسح المستخدم'
 ];
